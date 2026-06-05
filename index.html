@@ -181,15 +181,8 @@
       margin: 8px 10px;
     }
 
-    .nav-bottom {
-      padding: 10px;
-      border-top: 1px solid var(--border);
-    }
-
-    .api-key-btn {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+    .nav-bottom-placeholder {
+      /* reserved */
       width: 100%;
       padding: 9px 12px;
       border-radius: var(--radius-sm);
@@ -201,11 +194,6 @@
       cursor: pointer;
       transition: all 0.15s;
     }
-
-    .api-key-btn:hover { border-color: var(--accent); color: var(--accent-lt); }
-    .api-key-btn.key-set { border-style: solid; border-color: var(--teal); color: var(--teal); }
-
-    .api-key-btn svg { width: 14px; height: 14px; opacity: 0.7; }
 
     /* ─── Main Content ─────────────────────────────────────────── */
     #main {
@@ -1806,14 +1794,6 @@
       </button>
     </div>
 
-    <div class="nav-bottom">
-      <button class="api-key-btn" id="apiKeyBtn" onclick="openApiModal()">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/>
-        </svg>
-        <span id="apiKeyLabel">Set API Key</span>
-      </button>
-    </div>
   </nav>
 
   <!-- ─── Main ─────────────────────────────────────────────────── -->
@@ -2210,7 +2190,7 @@
         <div class="overlap-hero">
           <div>
             <h2>Overlap Detector</h2>
-            <p>Claude scans your stack and finds tools that compete for the same job — so you know what to cut or consolidate.</p>
+            <p>Analyzes your stack and finds tools that compete for the same job — so you know what to cut or consolidate.</p>
           </div>
           <button class="btn btn-primary" id="overlapRunBtn" onclick="runOverlapDetector()">
             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -2234,7 +2214,7 @@
         <div class="gap-hero">
           <div>
             <h2>Gap Finder</h2>
-            <p>Claude looks at what categories your stack already covers and identifies the most valuable ones you're missing.</p>
+            <p>Analyzes your stack's category coverage and surfaces the most valuable tool categories you're missing.</p>
           </div>
           <button class="btn btn-teal" id="gapsRunBtn" onclick="runGapFinder()">
             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -2269,37 +2249,6 @@
     </div><!-- /content -->
   </div><!-- /main -->
 </div><!-- /app -->
-
-<!-- ─── API Key Modal ──────────────────────────────────────────── -->
-<div class="modal-overlay" id="apiModal">
-  <div class="modal">
-    <div class="modal-header">
-      <div>
-        <h2>Anthropic API Key</h2>
-        <p>Required for AI-powered features (Overlap, Gap Finder, Compare)</p>
-      </div>
-      <button class="modal-close" onclick="closeApiModal()">×</button>
-    </div>
-    <div class="form-group">
-      <label class="form-label">API Key</label>
-      <input
-        type="password"
-        class="form-input"
-        id="apiKeyInput"
-        placeholder="sk-ant-api03-..."
-        autocomplete="off"
-      />
-      <p class="form-hint">
-        Your key is stored only in your browser's localStorage — never sent anywhere except directly to Anthropic's API.
-        Get your key at console.anthropic.com.
-      </p>
-    </div>
-    <div class="form-actions">
-      <button class="btn btn-ghost" onclick="closeApiModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="saveApiKey()">Save Key</button>
-    </div>
-  </div>
-</div>
 
 <!-- ─── Add Tool Modal ────────────────────────────────────────── -->
 <div class="modal-overlay" id="addToolModal">

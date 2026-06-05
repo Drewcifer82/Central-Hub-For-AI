@@ -1,8 +1,7 @@
-/* ─── app.js — shared state, navigation, activity, API key, sidebar ── */
+/* ─── app.js — shared state, navigation, activity, sidebar ── */
 
 const STATE = {
   stack:    JSON.parse(localStorage.getItem('aiHub_stack')    || '[]'),
-  apiKey:   localStorage.getItem('aiHub_apiKey')              || '',
   activity: JSON.parse(localStorage.getItem('aiHub_activity') || '[]'),
 };
 
@@ -12,7 +11,7 @@ const PAGE_META = {
   catalog: { title: 'Tool Catalog',     sub: 'Browse popular AI tools by category' },
   overlap: { title: 'Overlap Detector', sub: 'Find tools in your stack that do the same job' },
   gaps:    { title: 'Gap Finder',       sub: 'Discover tool categories missing from your stack' },
-  compare: { title: 'Compare Tools',    sub: 'Side-by-side AI-powered tool comparison' },
+  compare: { title: 'Compare Tools',    sub: 'Side-by-side tool comparison' },
 };
 
 /* ── Navigation ── */
@@ -84,31 +83,6 @@ function renderActivity() {
     `</div>`;
 }
 
-/* ── API Key ── */
-function openApiModal() {
-  document.getElementById('apiKeyInput').value = STATE.apiKey;
-  document.getElementById('apiModal').classList.add('open');
-}
-
-function closeApiModal() {
-  document.getElementById('apiModal').classList.remove('open');
-}
-
-function saveApiKey() {
-  const key = document.getElementById('apiKeyInput').value.trim();
-  STATE.apiKey = key;
-  localStorage.setItem('aiHub_apiKey', key);
-  updateApiKeyUI();
-  closeApiModal();
-  if (key) logActivity('<strong>API key</strong> saved — AI features ready', 'teal');
-}
-
-function updateApiKeyUI() {
-  const btn = document.getElementById('apiKeyBtn');
-  document.getElementById('apiKeyLabel').textContent = STATE.apiKey ? 'API Key Set ✓' : 'Set API Key';
-  STATE.apiKey ? btn.classList.add('key-set') : btn.classList.remove('key-set');
-}
-
 /* ── Mobile Sidebar ── */
 function toggleSidebar() {
   document.getElementById('sidebar').classList.contains('mobile-open') ? closeSidebar() : openSidebar();
@@ -125,10 +99,6 @@ function closeSidebar() {
 }
 
 /* ── Modal overlay close ── */
-document.getElementById('apiModal').addEventListener('click', function(e) {
-  if (e.target === this) closeApiModal();
-});
-
 document.getElementById('addToolModal').addEventListener('click', function(e) {
   if (e.target === this) closeAddToolModal();
 });
@@ -136,4 +106,3 @@ document.getElementById('addToolModal').addEventListener('click', function(e) {
 /* ── Init ── */
 refreshStats();
 renderActivity();
-updateApiKeyUI();
