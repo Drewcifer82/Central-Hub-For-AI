@@ -1084,6 +1084,194 @@
       justify-content: flex-end;
     }
 
+    /* ─── Catalog Page ─────────────────────────────────────────── */
+    .catalog-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+
+    .catalog-search-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .catalog-search-wrap svg {
+      position: absolute;
+      left: 11px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 14px;
+      height: 14px;
+      color: var(--text-dim);
+      pointer-events: none;
+    }
+
+    .catalog-search {
+      width: 100%;
+      padding: 8px 12px 8px 34px;
+      background: var(--card);
+      border: 1px solid var(--border-lt);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .catalog-search:focus { border-color: var(--accent); }
+    .catalog-search::placeholder { color: var(--text-dim); }
+
+    .catalog-count-label {
+      font-size: 12px;
+      color: var(--text-dim);
+      white-space: nowrap;
+    }
+
+    .catalog-count-label strong { color: var(--text-md); }
+
+    .catalog-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .catalog-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .catalog-card:hover { border-color: var(--border-lt); box-shadow: var(--shadow); }
+
+    .catalog-card-accent {
+      height: 3px;
+      width: 100%;
+      flex-shrink: 0;
+    }
+
+    .catalog-card-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .catalog-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .catalog-tool-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.2;
+    }
+
+    .catalog-cost {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--teal);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .catalog-cost.free { color: var(--text-dim); font-size: 12px; font-weight: 500; }
+
+    .catalog-desc {
+      font-size: 12px;
+      color: var(--text-dim);
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    .catalog-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .catalog-card-footer {
+      padding: 10px 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .catalog-website {
+      font-size: 11px;
+      color: var(--accent-lt);
+      text-decoration: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 120px;
+    }
+
+    .catalog-website:hover { text-decoration: underline; }
+
+    .btn-add-catalog {
+      background: var(--accent-dim);
+      color: var(--accent-lt);
+      border: 1px solid transparent;
+      font-size: 12px;
+      padding: 6px 12px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .btn-add-catalog:hover { background: var(--accent); color: #fff; }
+
+    .btn-in-stack {
+      background: var(--teal-dim);
+      color: var(--teal);
+      border: 1px solid var(--teal);
+      font-size: 12px;
+      padding: 6px 12px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      cursor: default;
+      opacity: 0.85;
+    }
+
+    .catalog-empty {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px;
+      gap: 10px;
+      text-align: center;
+    }
+
+    .catalog-empty h4 { font-size: 14px; font-weight: 600; color: var(--text); }
+    .catalog-empty p  { font-size: 12px; color: var(--text-dim); }
+
+    @media (max-width: 900px) {
+      .catalog-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .catalog-grid { grid-template-columns: 1fr; }
+      .catalog-controls { flex-direction: column; align-items: stretch; }
+      .catalog-search-wrap { min-width: unset; }
+    }
+
     /* ─── Scrollbar ─────────────────────────────────────────────── */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
@@ -1649,19 +1837,43 @@
       <!-- END page-stack -->
 
       <!-- ══════════════════════════════════════════════════════ -->
-      <!-- PAGE: Tool Catalog (placeholder)                      -->
+      <!-- PAGE: Tool Catalog                                    -->
       <!-- ══════════════════════════════════════════════════════ -->
       <div class="page" id="page-catalog">
-        <div class="placeholder-page">
-          <div class="big-icon">
-            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+
+        <!-- Controls -->
+        <div class="catalog-controls">
+          <div class="catalog-search-wrap">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
             </svg>
+            <input
+              type="text"
+              class="catalog-search"
+              id="catalog-search-input"
+              placeholder="Search tools by name, feature, or keyword…"
+              oninput="onCatalogSearch(this.value)"
+            />
           </div>
-          <h2>Tool Catalog</h2>
-          <p>Browse and search popular AI tools organized by category — not alphabetically.</p>
-          <span class="coming-soon-tag">Building Soon</span>
+          <select class="filter-select" id="catalog-cat-filter" onchange="onCatalogCategory(this.value)">
+            <option value="all">All Categories</option>
+            <option value="General AI Chat">General AI Chat</option>
+            <option value="Coding Assistant">Coding Assistant</option>
+            <option value="Writing & Content">Writing &amp; Content</option>
+            <option value="Image Generation">Image Generation</option>
+            <option value="Video Creation">Video Creation</option>
+            <option value="Audio & Transcription">Audio &amp; Transcription</option>
+            <option value="Research & Search">Research &amp; Search</option>
+            <option value="Productivity & Notes">Productivity &amp; Notes</option>
+            <option value="SEO & Marketing">SEO &amp; Marketing</option>
+            <option value="Data & Analytics">Data &amp; Analytics</option>
+          </select>
+          <span class="catalog-count-label"><strong id="catalog-count">0</strong> tools</span>
         </div>
+
+        <!-- Grid -->
+        <div class="catalog-grid" id="catalog-grid"></div>
+
       </div>
 
       <!-- ══════════════════════════════════════════════════════ -->
@@ -1814,7 +2026,19 @@
 <!-- ─── Scripts ───────────────────────────────────────────────── -->
 <script src="app.js"></script>
 <script src="stack.js"></script>
-<script src="ai-features.js"></script>
+<script src="catalog-data.js"></script>
+<script src="catalog.js"></script>
+<script src="aifeatures.js"></script>
+<script>
+  // Render catalog when its page becomes active
+  const _origNavigate = navigate;
+  navigate = function(page) {
+    _origNavigate(page);
+    if (page === 'catalog') renderCatalog();
+  };
+  // Initial render in case catalog is first page loaded
+  initCatalog();
+</script>
 
 </body>
 </html>
