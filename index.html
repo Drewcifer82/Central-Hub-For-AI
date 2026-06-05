@@ -2266,6 +2266,119 @@
       -webkit-line-clamp: 2; -webkit-box-orient: vertical;
     }
     .alt-empty { text-align: center; padding: 32px 16px; color: var(--text-dim); font-size: 13px; }
+
+    /* ─── Stack Card Page ─────────────────────────────────────────── */
+    .stackcard-hero {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .stackcard-hero h2 { font-size: 20px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+    .stackcard-hero p  { font-size: 13px; color: var(--text-md); max-width: 560px; }
+    .stackcard-customize {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .stackcard-cust-label {
+      font-size: 11px; font-weight: 600; color: var(--text-dim);
+      letter-spacing: 0.07em; text-transform: uppercase; flex-shrink: 0;
+    }
+    .stackcard-cust-hint { font-size: 11px; color: var(--text-dim); }
+    .stackcard-preview-wrap {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px;
+      display: flex; align-items: center; justify-content: center;
+      overflow-x: auto; margin-bottom: 14px;
+      box-shadow: inset 0 0 32px rgba(0,0,0,0.3);
+    }
+    .stackcard-actions { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+    .stackcard-tip {
+      display: flex; align-items: flex-start; gap: 8px;
+      font-size: 12px; color: var(--text-dim); line-height: 1.6;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 10px 14px;
+    }
+
+    /* ─── Stack Compare Page ──────────────────────────────────────── */
+    .scmp-hero {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .scmp-hero h2 { font-size: 20px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+    .scmp-hero p  { font-size: 13px; color: var(--text-md); max-width: 600px; }
+
+    .scmp-selector {
+      display: grid; grid-template-columns: 1fr auto 1fr;
+      gap: 0; align-items: stretch;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); margin-bottom: 20px; overflow: hidden;
+    }
+    .scmp-panel {
+      padding: 18px 20px;
+    }
+    .scmp-panel-label {
+      font-size: 10px; font-weight: 700; color: var(--text-dim);
+      letter-spacing: 0.09em; text-transform: uppercase; margin-bottom: 8px;
+    }
+    .scmp-panel-info { font-size: 14px; color: var(--text-md); }
+    .scmp-vs-divider {
+      display: flex; align-items: center; justify-content: center;
+      padding: 0 16px; border-left: 1px solid var(--border); border-right: 1px solid var(--border);
+    }
+    .scmp-vs-text {
+      font-size: 18px; font-weight: 800; color: var(--text-dim);
+      letter-spacing: 0.05em;
+    }
+    .scmp-select { margin-bottom: 6px; }
+    .scmp-import-label {
+      font-size: 11px; color: var(--teal); font-weight: 600; padding-top: 4px;
+    }
+
+    .scmp-stats-row {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 14px;
+    }
+    .scmp-stat-card {
+      border: 1px solid transparent; border-radius: var(--radius);
+      padding: 16px; text-align: center;
+    }
+    .scmp-stat-num   { font-size: 36px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+    .scmp-stat-label { font-size: 12px; color: var(--text-md); margin-bottom: 2px; }
+    .scmp-stat-pct   { font-size: 10px; color: var(--text-dim); }
+
+    .scmp-cost-strip {
+      display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 14px 18px; margin-bottom: 16px;
+    }
+    .scmp-cost-item  { text-align: center; min-width: 90px; }
+    .scmp-cost-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; font-weight: 600; letter-spacing: 0.06em; margin-bottom: 3px; }
+    .scmp-cost-val   { font-size: 16px; font-weight: 700; color: var(--white); }
+    .scmp-vs-pill    {
+      font-size: 11px; font-weight: 700; color: var(--text-dim);
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 20px; padding: 3px 10px; flex-shrink: 0;
+    }
+
+    .scmp-section { margin-bottom: 14px; }
+    .scmp-section-header {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 12px; font-weight: 700; padding: 7px 12px;
+      border-radius: var(--radius-sm); margin-bottom: 10px; line-height: 1.4;
+    }
+    .scmp-sh-shared { background: var(--teal-dim);   color: var(--teal);     border: 1px solid var(--teal)22; }
+    .scmp-sh-mine   { background: var(--accent-dim); color: var(--accent-lt);border: 1px solid var(--accent)22; }
+    .scmp-sh-theirs { background: var(--amber-dim);  color: var(--amber);    border: 1px solid var(--amber)22; }
+
+    .scmp-chip-row  { display: flex; flex-wrap: wrap; gap: 6px; }
+    .scmp-chip {
+      padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500;
+      border: 1px solid transparent; display: inline-flex; align-items: center;
+      gap: 4px; white-space: nowrap;
+    }
+
+    @media (max-width: 768px) {
+      .scmp-selector    { grid-template-columns: 1fr; }
+      .scmp-vs-divider  { padding: 10px 16px; border-left: none; border-right: none; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+      .scmp-stats-row   { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 
@@ -2390,6 +2503,15 @@
         Cost Optimizer
       </button>
 
+      <button class="nav-item" onclick="navigate('stackcompare')">
+        <span class="nav-icon">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M18 20V10M12 20V4M6 20v-6"/>
+          </svg>
+        </span>
+        Stack Compare
+      </button>
+
       <div class="nav-divider"></div>
       <div class="nav-section-label">Build</div>
 
@@ -2401,6 +2523,16 @@
           </svg>
         </span>
         Workflow Builder
+      </button>
+
+      <button class="nav-item" onclick="navigate('stackcard')">
+        <span class="nav-icon">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <rect x="3" y="3" width="18" height="14" rx="2"/>
+            <path d="M8 21h8M12 17v4"/>
+          </svg>
+        </span>
+        Stack Card
       </button>
     </div>
 
@@ -3002,6 +3134,100 @@
 
       </div>
 
+      <!-- ══════════════════════════════════════════════════════ -->
+      <!-- PAGE: Stack Card                                       -->
+      <!-- ══════════════════════════════════════════════════════ -->
+      <div class="page" id="page-stackcard">
+
+        <div class="stackcard-hero">
+          <div>
+            <h2>Stack Card</h2>
+            <p>Generate a shareable visual card of your AI stack — download it as a PNG to post on Twitter, LinkedIn, or Discord.</p>
+          </div>
+        </div>
+
+        <div class="stackcard-customize">
+          <label class="stackcard-cust-label">Card Title</label>
+          <input type="text" id="sc-card-title-input" class="workflow-name-input"
+            style="max-width:320px" value="My AI Stack" placeholder="My AI Stack"
+            oninput="drawStackCard()" />
+          <span class="stackcard-cust-hint">Edit to customize · card updates live</span>
+        </div>
+
+        <div class="stackcard-preview-wrap">
+          <canvas id="stack-card-canvas" width="1200" height="630"
+            style="max-width:100%;border-radius:10px;display:block;image-rendering:crisp-edges"></canvas>
+        </div>
+
+        <div class="stackcard-actions">
+          <button class="btn btn-primary" onclick="downloadStackCard()">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:14px;height:14px">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+            </svg>
+            Download PNG
+          </button>
+          <button class="btn btn-ghost" id="sc-copy-btn" onclick="copyStackCardToClipboard()">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:14px;height:14px">
+              <rect x="9" y="9" width="13" height="13" rx="2"/>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+            Copy to Clipboard
+          </button>
+        </div>
+
+        <div class="stackcard-tip">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:13px;height:13px;flex-shrink:0;margin-top:1px">
+            <circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>
+          </svg>
+          Card exports at 1200 × 630 px — ideal for Twitter / X, LinkedIn, and Discord posts.
+          Tools are sorted by category and color-coded. The grade badge updates with your Stack Health Score.
+        </div>
+
+      </div>
+
+      <!-- ══════════════════════════════════════════════════════ -->
+      <!-- PAGE: Stack Compare                                    -->
+      <!-- ══════════════════════════════════════════════════════ -->
+      <div class="page" id="page-stackcompare">
+
+        <div class="scmp-hero">
+          <div>
+            <h2>Stack Compare</h2>
+            <p>Compare your full stack side-by-side against a template or a friend's exported stack. See what you share, what's unique, and what you might be missing.</p>
+          </div>
+        </div>
+
+        <div class="scmp-selector">
+          <div class="scmp-panel">
+            <div class="scmp-panel-label">Your Stack</div>
+            <div id="scmp-my-info" class="scmp-panel-info">Loading…</div>
+          </div>
+
+          <div class="scmp-vs-divider">
+            <div class="scmp-vs-text">VS</div>
+          </div>
+
+          <div class="scmp-panel">
+            <div class="scmp-panel-label">Compare Against</div>
+            <select id="scmp-target-select" class="form-input scmp-select" onchange="handleScmpTargetSelect()">
+              <option value="">Choose a template…</option>
+              <option value="solo-creator">Solo Creator Template</option>
+              <option value="developer">Developer Template</option>
+              <option value="content-marketer">Content Marketer Template</option>
+              <option value="researcher">Researcher Template</option>
+              <option value="startup-founder">Startup Founder Template</option>
+              <option value="import">Import friend's stack JSON…</option>
+            </select>
+            <div id="scmp-import-label" class="scmp-import-label" style="display:none"></div>
+            <input type="file" id="scmp-import-input" accept=".json" style="display:none"
+              onchange="handleScmpImport(event)" />
+          </div>
+        </div>
+
+        <div id="scmp-results"></div>
+
+      </div>
+
     </div><!-- /content -->
   </div><!-- /main -->
 </div><!-- /app -->
@@ -3208,6 +3434,8 @@
 <script src="integrations.js"></script>
 <script src="templates.js"></script>
 <script src="workflows.js"></script>
+<script src="stackcard.js"></script>
+<script src="stackcompare.js"></script>
 <script>
   // Page-specific init on navigation
   const _origNavigate = navigate;
@@ -3221,6 +3449,8 @@
     if (page === 'cost')         initCostOptimizer();
     if (page === 'templates')    initTemplates();
     if (page === 'workflow')     initWorkflow();
+    if (page === 'stackcard')    initStackCard();
+    if (page === 'stackcompare') initStackCompare();
   };
   initCatalog();
 </script>
