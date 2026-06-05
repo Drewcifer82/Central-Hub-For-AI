@@ -900,8 +900,394 @@ const _origRefreshStatsAI = refreshStats;
 refreshStats = function() {
   _origRefreshStatsAI();
   refreshOverlapGapStats();
+  refreshHealthScore();
 };
 refreshOverlapGapStats();
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   STACK HEALTH SCORE
+   ═══════════════════════════════════════════════════════════════════ */
+
+function _computeHealthScore() {
+  if (STATE.stack.length === 0) return null;
+
+  let score = 100;
+  const issues  = [];
+  const bonuses = [];
+
+  /* ── Overlap penalties ── */
+  const byCat = {};
+  STATE.stack.forEach(t => { (byCat[t.category] = byCat[t.category] || []).push(t); });
+
+  let sameOverlaps = 0;
+  Object.values(byCat).forEach(tools => { if (tools.length >= 2) sameOverlaps++; });
+
+  let crossMed = 0, crossLow = 0;
+  const userCats = new Set(STATE.stack.map(t => t.category));
+  _CROSS_OVERLAPS.forEach(p => {
+    if (!userCats.has(p.cats[0]) || !userCats.has(p.cats[1])) return;
+    if (p.severity === 'medium') crossMed++;
+    else crossLow++;
+  });
+
+  if (sameOverlaps > 0) {
+    const pen = sameOverlaps * 15;
+    score -= pen;
+    issues.push({ severity: 'high', icon: 'overlap', text: `${sameOverlaps} same-category overlap${sameOverlaps > 1 ? 's' : ''} — likely paying for duplicate tools`, penalty: pen });
+  }
+  if (crossMed > 0) {
+    const pen = crossMed * 8;
+    score -= pen;
+    issues.push({ severity: 'medium', icon: 'overlap', text: `${crossMed} cross-category overlap${crossMed > 1 ? 's' : ''} detected`, penalty: pen });
+  }
+  if (crossLow > 0) {
+    const pen = crossLow * 3;
+    score -= pen;
+    issues.push({ severity: 'low', icon: 'overlap', text: `${crossLow} minor cross-category overlap${crossLow > 1 ? 's' : ''}`, penalty: pen });
+  }
+
+  /* ── Gap penalties ── */
+  const covered = new Set(STATE.stack.map(t => t.category).filter(c => _ALL_CATEGORIES.includes(c)));
+  const missing = _ALL_CATEGORIES.filter(c => !covered.has(c));
+  let highGaps = 0, medGaps = 0, lowGaps = 0;
+  missing.forEach(cat => {
+    const p = _gapPriority(cat, covered);
+    if (p === 'high') highGaps++;
+    else if (p === 'medium') medGaps++;
+    else lowGaps++;
+  });
+  if (highGaps > 0) {
+    const pen = highGaps * 5;
+    score -= pen;
+    issues.push({ severity: 'high', icon: 'gap', text: `${highGaps} high-priority category gap${highGaps > 1 ? 's' : ''} in your stack`, penalty: pen });
+  }
+  if (medGaps > 0) {
+    const pen = medGaps * 3;
+    score -= pen;
+    issues.push({ severity: 'medium', icon: 'gap', text: `${medGaps} medium-priority gap${medGaps > 1 ? 's' : ''} to consider filling`, penalty: pen });
+  }
+
+  /* ── Tier balance ── */
+  const evaluating = STATE.stack.filter(t => t.tier === 'Evaluating').length;
+  if (evaluating > 0 && evaluating / STATE.stack.length > 0.4) {
+    score -= 5;
+    issues.push({ severity: 'medium', icon: 'tier', text: `${evaluating} tools still in Evaluating — time to commit or cut`, penalty: 5 });
+  }
+
+  /* ── Bonuses ── */
+  if (sameOverlaps === 0 && crossMed === 0) {
+    bonuses.push({ text: 'No significant overlaps — clean, focused stack', value: 0 });
+  }
+  if (covered.size >= 5) {
+    bonuses.push({ text: `${covered.size} categories covered — broad capability stack`, value: 0 });
+  }
+
+  score = Math.max(0, Math.min(100, score));
+
+  let grade, label, color;
+  if      (score >= 85) { grade = 'A'; label = 'Excellent';   color = 'var(--teal)'; }
+  else if (score >= 70) { grade = 'B'; label = 'Good';        color = '#22c55e'; }
+  else if (score >= 55) { grade = 'C'; label = 'Fair';        color = 'var(--amber)'; }
+  else if (score >= 40) { grade = 'D'; label = 'Needs Work';  color = '#f97316'; }
+  else                  { grade = 'F'; label = 'Critical';    color = 'var(--red)'; }
+
+  return { score, grade, label, color, issues, bonuses, covered, missing };
+}
+
+function refreshHealthScore() {
+  const result = _computeHealthScore();
+
+  const circle   = document.getElementById('health-grade-circle');
+  const labelEl  = document.getElementById('health-grade-label');
+  const subEl    = document.getElementById('health-band-sub');
+  const fillEl   = document.getElementById('health-progress-fill');
+  if (!circle) return;
+
+  if (!result) {
+    circle.textContent = '—';
+    circle.style.borderColor = 'var(--border)';
+    circle.style.color = 'var(--text-dim)';
+    labelEl.textContent = 'Add tools to get a score';
+    labelEl.style.color = 'var(--white)';
+    subEl.textContent = 'Your score is based on overlaps, gaps, and tier balance in your stack.';
+    fillEl.style.width = '0%';
+    fillEl.style.backgroundColor = 'var(--border)';
+    return;
+  }
+
+  circle.textContent = result.grade;
+  circle.style.borderColor = result.color;
+  circle.style.color = result.color;
+  labelEl.textContent = `${result.label} — ${result.score}/100`;
+  labelEl.style.color = result.color;
+
+  const issueCount = result.issues.filter(i => i.severity !== 'low').length;
+  subEl.textContent = issueCount === 0
+    ? 'Your stack looks clean. Keep it focused and review any evaluating tools.'
+    : `${issueCount} issue${issueCount > 1 ? 's' : ''} found — click to see what's hurting your score.`;
+
+  fillEl.style.width = result.score + '%';
+  fillEl.style.backgroundColor = result.color;
+}
+
+function openHealthModal() {
+  const result = _computeHealthScore();
+  if (!result) { navigate('stack'); return; }
+
+  document.getElementById('healthModalTitle').textContent = `Stack Health — ${result.grade} (${result.score}/100)`;
+  document.getElementById('healthModalSub').textContent   = result.label;
+  document.getElementById('healthModalBody').innerHTML    = _renderHealthModalBody(result);
+  document.getElementById('healthModal').classList.add('open');
+}
+
+function closeHealthModal() {
+  document.getElementById('healthModal').classList.remove('open');
+}
+
+function _renderHealthModalBody(result) {
+  const scoreBar = `
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:16px">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="width:54px;height:54px;border-radius:50%;border:3px solid ${result.color};display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:${result.color};flex-shrink:0">${result.grade}</div>
+        <div style="flex:1">
+          <div style="font-size:16px;font-weight:700;color:${result.color};margin-bottom:4px">${result.label} — ${result.score} / 100</div>
+          <div style="height:8px;background:var(--card);border-radius:99px;overflow:hidden">
+            <div style="height:100%;width:${result.score}%;background:${result.color};border-radius:99px;transition:width 0.5s ease"></div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+  const issuesHTML = result.issues.length === 0 ? '' : `
+    <div style="font-size:11px;font-weight:700;color:var(--text-dim);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px">What's hurting your score</div>
+    <div style="margin-bottom:16px">
+      ${result.issues.map(issue => {
+        const isHigh = issue.severity === 'high';
+        const isMed  = issue.severity === 'medium';
+        const col    = isHigh ? 'var(--red)' : isMed ? 'var(--amber)' : 'var(--text-dim)';
+        const colDim = isHigh ? 'var(--red-dim)' : isMed ? 'var(--amber-dim)' : 'var(--card)';
+        const iconPath = issue.icon === 'overlap'
+          ? '<circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/>'
+          : issue.icon === 'gap'
+            ? '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>'
+            : '<rect x="2" y="3" width="20" height="4" rx="1"/><rect x="2" y="10" width="20" height="4" rx="1"/>';
+        const actionLabel = issue.icon === 'overlap' ? 'Overlap Detector' : issue.icon === 'gap' ? 'Gap Finder' : 'My Stack';
+        const actionPage  = issue.icon === 'overlap' ? 'overlap' : issue.icon === 'gap' ? 'gaps' : 'stack';
+        return `
+          <div class="health-breakdown-row">
+            <div class="health-breakdown-icon" style="background:${colDim}">
+              <svg fill="none" stroke="${col}" stroke-width="2" viewBox="0 0 24 24">${iconPath}</svg>
+            </div>
+            <div class="health-breakdown-body">
+              <div class="health-breakdown-label">${issue.text}</div>
+              <div class="health-breakdown-detail">
+                <button onclick="closeHealthModal();navigate('${actionPage}')"
+                  style="background:none;border:none;color:var(--accent-lt);cursor:pointer;font-size:12px;padding:0;text-decoration:underline">
+                  Open ${actionLabel} →
+                </button>
+              </div>
+            </div>
+            <div class="health-breakdown-penalty" style="background:${colDim};color:${col}">−${issue.penalty} pts</div>
+          </div>`;
+      }).join('')}
+    </div>`;
+
+  const bonusesHTML = result.bonuses.length === 0 ? '' : `
+    <div style="font-size:11px;font-weight:700;color:var(--text-dim);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px">What's working well</div>
+    <div>
+      ${result.bonuses.map(b => `
+        <div class="health-breakdown-row">
+          <div class="health-breakdown-icon" style="background:var(--teal-dim)">
+            <svg fill="none" stroke="var(--teal)" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <div class="health-breakdown-body">
+            <div class="health-breakdown-label" style="color:var(--teal)">${b.text}</div>
+          </div>
+        </div>`).join('')}
+    </div>`;
+
+  const tip = result.score < 85
+    ? `<div style="margin-top:16px;padding:12px 14px;background:var(--accent-dim);border-radius:var(--radius-sm);font-size:12px;color:var(--accent-lt);line-height:1.6">
+        <strong style="color:var(--white)">To improve your score:</strong> Fix overlaps first (−15 pts each), then consider filling high-priority gaps (−5 pts each).
+        ${result.issues.some(i => i.icon === 'overlap') ? ' Open the <button onclick="closeHealthModal();navigate(\'cost\')" style="background:none;border:none;color:var(--accent-lt);cursor:pointer;font-size:12px;padding:0;text-decoration:underline">Cost Optimizer</button> to see exactly what to cut.' : ''}
+       </div>`
+    : `<div style="margin-top:16px;padding:12px 14px;background:var(--teal-dim);border-radius:var(--radius-sm);font-size:12px;color:var(--teal);line-height:1.6">
+        <strong style="color:var(--white)">Great stack!</strong> Keep tools purposeful — add new ones intentionally and revisit Evaluating tier tools regularly.
+       </div>`;
+
+  return scoreBar + issuesHTML + bonusesHTML + tip;
+}
+
+refreshHealthScore();
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   COST OPTIMIZER
+   ═══════════════════════════════════════════════════════════════════ */
+
+function _computeCostSavings() {
+  const suggestions = [];
+
+  /* ── Same-category overlaps: suggest cutting the priciest ── */
+  const byCat = {};
+  STATE.stack.forEach(t => { (byCat[t.category] = byCat[t.category] || []).push(t); });
+
+  Object.entries(byCat).forEach(([cat, tools]) => {
+    if (tools.length < 2) return;
+    const sorted   = [...tools].sort((a, b) => (b.cost || 0) - (a.cost || 0));
+    const priciest = sorted[0];
+    const keepers  = sorted.slice(1);
+    const saving   = parseFloat(priciest.cost) || 0;
+
+    suggestions.push({
+      type:    'overlap',
+      title:   `${cat} — ${tools.length} tools doing the same job`,
+      cutTool: priciest,
+      keep:    keepers,
+      saving,
+      reason:  saving > 0
+        ? `You have ${tools.length} ${cat} tools. Cutting <strong>${priciest.name}</strong> ($${saving}/mo) would save $${saving}/mo — ${keepers.map(t => t.name).join(' and ')} can cover the same role.`
+        : `You have ${tools.length} ${cat} tools but none have costs logged. Audit which you actually use and remove the redundant one.`,
+    });
+  });
+
+  /* ── Evaluating tools past 14 days ── */
+  STATE.stack.forEach(t => {
+    if ((t.tier || 'Primary') !== 'Evaluating') return;
+    const days = Math.floor((Date.now() - new Date(t.addedAt)) / 86400000);
+    if (days < 14) return;
+    const cost = parseFloat(t.cost) || 0;
+    suggestions.push({
+      type:    'evaluating',
+      title:   `${t.name} has been in Evaluating for ${days} days`,
+      cutTool: t,
+      keep:    [],
+      saving:  cost,
+      reason:  cost > 0
+        ? `You're paying $${cost}/mo for <strong>${t.name}</strong> without committing to it. Promote it to Primary if it's earning its place, or cut it to save $${cost}/mo.`
+        : `<strong>${t.name}</strong> has been on trial for ${days} days. Make a decision: promote it or remove it from your stack.`,
+    });
+  });
+
+  /* Sort: overlaps with savings first, then evaluating */
+  suggestions.sort((a, b) => {
+    if (a.type !== b.type) return a.type === 'overlap' ? -1 : 1;
+    return b.saving - a.saving;
+  });
+
+  const totalSavings = suggestions
+    .filter(s => s.type === 'overlap')
+    .reduce((sum, s) => sum + s.saving, 0);
+
+  return { suggestions, totalSavings };
+}
+
+function initCostOptimizer() {
+  const data = _computeCostSavings();
+  _renderCostHero(data);
+  _renderCostResults(data);
+}
+
+function _renderCostHero(data) {
+  const amountEl = document.getElementById('cost-hero-amount');
+  const labelEl  = document.getElementById('cost-hero-label');
+  if (!amountEl) return;
+
+  const s = data.totalSavings;
+  if (s > 0) {
+    amountEl.innerHTML = `$${s % 1 === 0 ? s : s.toFixed(2)}<span>/mo</span>`;
+    labelEl.textContent = `potential savings — $${(s * 12).toFixed(0)} saved per year if applied`;
+  } else {
+    amountEl.innerHTML = `$0<span>/mo</span>`;
+    labelEl.textContent = data.suggestions.length > 0
+      ? 'no paid duplicates found — check Evaluating tools below'
+      : 'no savings opportunities found in your current stack';
+  }
+}
+
+function _renderCostResults(data) {
+  const el = document.getElementById('cost-results');
+  if (!el) return;
+
+  if (STATE.stack.length === 0) {
+    el.innerHTML = `
+      <div class="overlap-empty">
+        <div class="overlap-empty-icon">
+          <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+        </div>
+        <h3>Stack is empty</h3>
+        <p>Add tools to your stack to find cost-saving opportunities.</p>
+        <button class="btn btn-ghost" onclick="navigate('stack')">Go to My Stack</button>
+      </div>`;
+    return;
+  }
+
+  if (data.suggestions.length === 0) {
+    el.innerHTML = `
+      <div class="overlap-empty">
+        <div class="overlap-empty-icon" style="background:var(--teal-dim);border-color:var(--teal)44">
+          <svg fill="none" stroke="var(--teal)" stroke-width="1.5" viewBox="0 0 24 24">
+            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <h3>Stack looks lean</h3>
+        <p>No same-category duplicates or stalled evaluations found. Your stack is well-optimized.</p>
+      </div>`;
+    return;
+  }
+
+  el.innerHTML = `<div class="cost-suggestion-list">` +
+    data.suggestions.map(s => _renderCostSuggestion(s)).join('') +
+    `</div>`;
+}
+
+function _renderCostSuggestion(s) {
+  const isOverlap = s.type === 'overlap';
+  const saving    = parseFloat(s.saving) || 0;
+  const badgeClass = isOverlap ? '' : 'type-eval';
+  const cardClass  = isOverlap ? 'type-overlap' : 'type-eval';
+
+  const cutCatStyle  = getCatStyle(s.cutTool.category);
+  const chipsHTML = isOverlap
+    ? `<div class="chip-cut">Cut: ${s.cutTool.name}${saving > 0 ? ' — $' + saving + '/mo' : ''}</div>` +
+      s.keep.map(t => `<div class="chip-keep">Keep: ${t.name}${t.cost > 0 ? ' — $' + t.cost + '/mo' : ' (free)'}</div>`).join('')
+    : `<div class="chip-eval">Evaluating: ${s.cutTool.name}${saving > 0 ? ' — $' + saving + '/mo' : ''}</div>`;
+
+  const compareBtn = (() => {
+    if (!isOverlap || s.keep.length < 1) return '';
+    const cA = CATALOG.find(c => c.name.toLowerCase() === s.cutTool.name.toLowerCase());
+    const cB = CATALOG.find(c => c.name.toLowerCase() === s.keep[0].name.toLowerCase());
+    if (!cA || !cB) return '';
+    return `<button class="btn btn-ghost" style="font-size:11px;padding:5px 11px"
+      onclick="navigateToCompare('catalog:${cA.id}','catalog:${cB.id}')">
+      Compare side-by-side →
+    </button>`;
+  })();
+
+  const deleteBtn = `<button class="btn btn-ghost" style="font-size:11px;padding:5px 11px;color:var(--red)"
+    onclick="if(confirm('Remove ${s.cutTool.name.replace(/'/g,"\\'")} from your stack?')){deleteTool(${s.cutTool.id});initCostOptimizer();}">
+    Remove ${s.cutTool.name}
+  </button>`;
+
+  return `
+    <div class="cost-suggestion ${cardClass}">
+      <div class="cost-save-badge ${badgeClass}">
+        <div class="cost-save-amount">${saving > 0 ? '$' + (saving % 1 === 0 ? saving : saving.toFixed(2)) : '—'}</div>
+        <div class="cost-save-mo">${saving > 0 ? '/mo' : 'free'}</div>
+      </div>
+      <div class="cost-suggestion-body">
+        <div class="cost-suggestion-title">${s.title}</div>
+        <div class="cost-chip-row">${chipsHTML}</div>
+        <div class="cost-suggestion-reason">${s.reason}</div>
+        <div class="cost-suggestion-action">${compareBtn}${deleteBtn}</div>
+      </div>
+    </div>`;
+}
 
 
 /* ── Dashboard Overlap Modal ── */

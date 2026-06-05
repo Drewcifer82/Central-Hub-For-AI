@@ -13,6 +13,7 @@ const PAGE_META = {
   gaps:    { title: 'Gap Finder',       sub: 'Discover tool categories missing from your stack' },
   compare:      { title: 'Compare Tools',    sub: 'Side-by-side tool comparison' },
   integrations: { title: 'Integration Map', sub: 'See which tools in your stack connect and work together' },
+  cost:         { title: 'Cost Optimizer',  sub: 'Find tools you can cut and see exactly how much you\'d save' },
 };
 
 /* ── Navigation ── */

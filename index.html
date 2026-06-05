@@ -1861,6 +1861,131 @@
     }
     .sidebar-backdrop.show { display: block; }
 
+    /* ─── Stack Health Band ─────────────────────────────────────── */
+    .health-band {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 22px;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .health-band:hover { background: var(--card-hover); border-color: var(--border-lt); }
+
+    .health-grade-circle {
+      width: 62px; height: 62px;
+      border-radius: 50%;
+      border: 3px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 28px; font-weight: 800; letter-spacing: -1px;
+      color: var(--text-dim);
+      transition: border-color 0.3s, color 0.3s;
+    }
+
+    .health-band-info { flex: 1; min-width: 0; }
+    .health-band-title {
+      font-size: 10px; font-weight: 600; color: var(--text-dim);
+      letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 2px;
+    }
+    .health-grade-label {
+      font-size: 17px; font-weight: 700; color: var(--white); margin-bottom: 3px;
+      transition: color 0.3s;
+    }
+    .health-band-sub { font-size: 12px; color: var(--text-md); line-height: 1.5; margin-bottom: 9px; }
+
+    .health-progress-track {
+      height: 5px; background: var(--surface); border-radius: 99px; overflow: hidden;
+    }
+    .health-progress-fill {
+      height: 100%; border-radius: 99px; width: 0%;
+      transition: width 0.5s ease, background-color 0.3s;
+    }
+
+    .health-band-cta {
+      font-size: 12px; color: var(--text-dim); white-space: nowrap;
+      display: flex; align-items: center; gap: 5px; flex-shrink: 0;
+    }
+    .health-band-cta svg { width: 14px; height: 14px; }
+
+    /* Health modal breakdown */
+    .health-breakdown-row {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 0; border-bottom: 1px solid var(--border);
+    }
+    .health-breakdown-row:last-child { border-bottom: none; }
+    .health-breakdown-icon {
+      width: 32px; height: 32px; border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .health-breakdown-icon svg { width: 16px; height: 16px; }
+    .health-breakdown-body { flex: 1; }
+    .health-breakdown-label { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+    .health-breakdown-detail { font-size: 12px; color: var(--text-md); line-height: 1.5; }
+    .health-breakdown-penalty {
+      font-size: 11px; font-weight: 700; padding: 2px 8px;
+      border-radius: 4px; flex-shrink: 0; align-self: flex-start; margin-top: 2px;
+    }
+
+    /* ─── Cost Optimizer Page ────────────────────────────────────── */
+    .cost-hero {
+      display: flex; align-items: center; justify-content: space-between;
+      background: linear-gradient(135deg, var(--teal-dim) 0%, #062830 100%);
+      border: 1px solid #00d4aa33; border-radius: var(--radius);
+      padding: 20px 24px; gap: 20px; flex-wrap: wrap;
+    }
+    .cost-hero-left { display: flex; align-items: center; gap: 16px; }
+    .cost-hero-icon {
+      width: 48px; height: 48px; border-radius: var(--radius);
+      background: #00d4aa22; border: 1px solid #00d4aa44;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .cost-hero-icon svg { width: 24px; height: 24px; stroke: var(--teal); }
+    .cost-hero-amount { font-size: 32px; font-weight: 800; color: var(--teal); line-height: 1; letter-spacing: -1px; }
+    .cost-hero-amount span { font-size: 15px; font-weight: 500; opacity: 0.75; }
+    .cost-hero-label { font-size: 12px; color: var(--text-md); margin-top: 3px; }
+
+    .cost-suggestion-list { display: flex; flex-direction: column; gap: 12px; }
+    .cost-suggestion {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 16px 18px;
+      display: flex; gap: 16px; align-items: flex-start;
+    }
+    .cost-suggestion.type-eval { border-left: 3px solid var(--amber); }
+    .cost-suggestion.type-overlap { border-left: 3px solid var(--red); }
+
+    .cost-save-badge {
+      text-align: center; flex-shrink: 0; width: 68px;
+      padding: 10px 6px; background: var(--teal-dim);
+      border: 1px solid #00d4aa22; border-radius: var(--radius-sm);
+    }
+    .cost-save-badge.type-eval { background: var(--amber-dim); border-color: var(--amber)22; }
+    .cost-save-amount { font-size: 16px; font-weight: 800; color: var(--teal); line-height: 1; }
+    .cost-save-badge.type-eval .cost-save-amount { color: var(--amber); }
+    .cost-save-mo { font-size: 10px; color: var(--text-dim); text-transform: uppercase; font-weight: 600; margin-top: 2px; }
+
+    .cost-suggestion-body { flex: 1; min-width: 0; }
+    .cost-suggestion-title { font-size: 13px; font-weight: 600; color: var(--white); margin-bottom: 5px; }
+    .cost-chip-row { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
+    .chip-cut {
+      padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;
+      background: var(--red-dim); color: var(--red); border: 1px solid var(--red)33;
+    }
+    .chip-keep {
+      padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 500;
+      background: var(--teal-dim); color: var(--teal); border: 1px solid var(--teal)33;
+    }
+    .chip-eval {
+      padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;
+      background: var(--amber-dim); color: var(--amber); border: 1px solid var(--amber)33;
+    }
+    .cost-suggestion-reason { font-size: 12px; color: var(--text-md); line-height: 1.6; }
+    .cost-suggestion-action {
+      display: flex; gap: 6px; margin-top: 10px;
+    }
+
     /* ─── Responsive ─────────────────────────────────────────────── */
     @media (max-width: 900px) {
       .spotlight-grid { grid-template-columns: 1fr 1fr; }
@@ -2087,6 +2212,15 @@
         </span>
         Integration Map
       </button>
+
+      <button class="nav-item" onclick="navigate('cost')">
+        <span class="nav-icon">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+        </span>
+        Cost Optimizer
+      </button>
     </div>
 
   </nav>
@@ -2207,6 +2341,25 @@
             </div>
             <div class="stat-value" id="stat-gaps">—</div>
             <div class="stat-delta" id="stat-gap-delta">Run gap analysis</div>
+          </div>
+        </div>
+
+        <!-- Stack Health Score Band -->
+        <div class="health-band" id="health-band" onclick="openHealthModal()" style="cursor:pointer">
+          <div class="health-grade-circle" id="health-grade-circle">—</div>
+          <div class="health-band-info">
+            <div class="health-band-title">Stack Health Score</div>
+            <div class="health-grade-label" id="health-grade-label">Add tools to get a score</div>
+            <div class="health-band-sub" id="health-band-sub">Your score is based on overlaps, gaps, and tier balance in your stack.</div>
+            <div class="health-progress-track">
+              <div class="health-progress-fill" id="health-progress-fill"></div>
+            </div>
+          </div>
+          <div class="health-band-cta">
+            View Breakdown
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
           </div>
         </div>
 
@@ -2594,6 +2747,34 @@
 
       </div>
 
+      <!-- ══════════════════════════════════════════════════════ -->
+      <!-- PAGE: Cost Optimizer                                   -->
+      <!-- ══════════════════════════════════════════════════════ -->
+      <div class="page" id="page-cost">
+
+        <div class="cost-hero" id="cost-hero">
+          <div class="cost-hero-left">
+            <div class="cost-hero-icon">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              </svg>
+            </div>
+            <div>
+              <div class="cost-hero-amount" id="cost-hero-amount">$0<span>/mo</span></div>
+              <div class="cost-hero-label" id="cost-hero-label">potential savings identified</div>
+            </div>
+          </div>
+          <div>
+            <p style="font-size:12px;color:var(--text-md);max-width:320px;line-height:1.6">
+              Finds same-category tool overlaps in your stack and shows exactly which tool to cut and how much you'd save.
+            </p>
+          </div>
+        </div>
+
+        <div id="cost-results"></div>
+
+      </div>
+
     </div><!-- /content -->
   </div><!-- /main -->
 </div><!-- /app -->
@@ -2698,6 +2879,24 @@
   </div>
 </div>
 
+<!-- ─── Stack Health Modal ───────────────────────────────────── -->
+<div class="modal-overlay" id="healthModal" onclick="if(event.target===this)closeHealthModal()">
+  <div class="modal" style="width:min(600px,95vw);max-height:85vh;display:flex;flex-direction:column">
+    <div class="modal-header">
+      <div>
+        <h2 id="healthModalTitle">Stack Health Score</h2>
+        <p id="healthModalSub">Score breakdown and improvement suggestions</p>
+      </div>
+      <button class="modal-close" onclick="closeHealthModal()">×</button>
+    </div>
+    <div id="healthModalBody" style="overflow-y:auto;flex:1"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:16px;padding-top:14px;border-top:1px solid var(--border);flex-shrink:0">
+      <button class="btn btn-ghost" style="font-size:12px" onclick="closeHealthModal();navigate('cost')">Open Cost Optimizer →</button>
+      <button class="btn btn-ghost" onclick="closeHealthModal()">Close</button>
+    </div>
+  </div>
+</div>
+
 <!-- ─── Alternatives Modal ───────────────────────────────────── -->
 <div class="modal-overlay" id="alternativesModal" onclick="if(event.target===this)closeAlternativesModal()">
   <div class="modal" style="width:500px">
@@ -2731,6 +2930,7 @@
     if (page === 'gaps')         initGaps();
     if (page === 'compare')      initCompare();
     if (page === 'integrations') initIntegrations();
+    if (page === 'cost')         initCostOptimizer();
   };
   initCatalog();
 </script>
