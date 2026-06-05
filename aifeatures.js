@@ -583,3 +583,277 @@ function browseGapCategory(category) {
   if (sel) sel.value = category;
   navigate('catalog');
 }
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   COMPARE TOOLS
+   ═══════════════════════════════════════════════════════════════════ */
+
+function initCompare() {
+  _populateCompareSelects();
+  renderCompare();
+}
+
+function _populateCompareSelects() {
+  const selA = document.getElementById('compare-tool-a');
+  const selB = document.getElementById('compare-tool-b');
+  if (!selA || !selB) return;
+
+  const optHTML = _buildCompareOptions();
+
+  [selA, selB].forEach(sel => {
+    const prev = sel.value;
+    sel.innerHTML = `<option value="">Choose a tool…</option>` + optHTML;
+    if (prev) sel.value = prev;
+  });
+}
+
+function _buildCompareOptions() {
+  /* Catalog tools grouped by category */
+  const byCategory = {};
+  CATALOG.forEach(tool => {
+    if (!byCategory[tool.category]) byCategory[tool.category] = [];
+    byCategory[tool.category].push(
+      `<option value="catalog:${tool.id}">${tool.name} — ${tool.costLabel}</option>`
+    );
+  });
+
+  let html = '';
+  _ALL_CATEGORIES.forEach(cat => {
+    if (byCategory[cat]) {
+      html += `<optgroup label="${cat}">` + byCategory[cat].join('') + `</optgroup>`;
+    }
+  });
+
+  /* Stack-only custom tools (not in catalog by name) */
+  const stackOnly = STATE.stack.filter(
+    t => !CATALOG.some(c => c.name.toLowerCase() === t.name.toLowerCase())
+  );
+  if (stackOnly.length > 0) {
+    html += `<optgroup label="My Stack (Custom Tools)">`;
+    stackOnly.forEach(t => {
+      html += `<option value="stack:${t.id}">${t.name} — ${formatCost(t.cost)}</option>`;
+    });
+    html += `</optgroup>`;
+  }
+
+  return html;
+}
+
+function _getToolData(value) {
+  if (!value) return null;
+
+  if (value.startsWith('catalog:')) {
+    const tool = CATALOG.find(t => t.id === value.replace('catalog:', ''));
+    if (!tool) return null;
+    return {
+      name:        tool.name,
+      category:    tool.category,
+      cost:        tool.cost,
+      costLabel:   tool.costLabel,
+      description: tool.description,
+      features:    tool.features  || [],
+      tags:        tool.tags      || [],
+      website:     tool.website   || '',
+      source:      'catalog',
+    };
+  }
+
+  if (value.startsWith('stack:')) {
+    const tool = STATE.stack.find(t => t.id === parseInt(value.replace('stack:', '')));
+    if (!tool) return null;
+    return {
+      name:        tool.name,
+      category:    tool.category,
+      cost:        tool.cost || 0,
+      costLabel:   formatCost(tool.cost),
+      description: tool.useCase || '',
+      features:    tool.features || [],
+      tags:        [],
+      website:     tool.website || '',
+      source:      'stack',
+    };
+  }
+
+  return null;
+}
+
+function renderCompare() {
+  const valA = document.getElementById('compare-tool-a')?.value;
+  const valB = document.getElementById('compare-tool-b')?.value;
+  const el   = document.getElementById('compare-results');
+  if (!el) return;
+
+  if (!valA && !valB) {
+    el.innerHTML = `
+      <div class="compare-empty">
+        <div class="compare-empty-icon">
+          <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path d="M18 20V10M12 20V4M6 20v-6"/>
+          </svg>
+        </div>
+        <h3>Pick two tools to compare</h3>
+        <p>Select Tool A and Tool B from the dropdowns above to see a full side-by-side breakdown.</p>
+      </div>`;
+    return;
+  }
+
+  if (!valA || !valB) {
+    el.innerHTML = `
+      <div class="compare-empty">
+        <div class="compare-empty-icon" style="background:var(--accent-dim);border-color:var(--accent)44">
+          <svg fill="none" stroke="var(--accent-lt)" stroke-width="1.5" viewBox="0 0 24 24">
+            <path d="M18 20V10M12 20V4M6 20v-6"/>
+          </svg>
+        </div>
+        <h3>Now pick the second tool</h3>
+        <p>One tool selected — choose the second to run the comparison.</p>
+      </div>`;
+    return;
+  }
+
+  if (valA === valB) {
+    el.innerHTML = `
+      <div class="compare-empty">
+        <div class="compare-empty-icon">
+          <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path d="M18 20V10M12 20V4M6 20v-6"/>
+          </svg>
+        </div>
+        <h3>Pick two different tools</h3>
+        <p>Both dropdowns point to the same tool — choose a different one in Tool B.</p>
+      </div>`;
+    return;
+  }
+
+  const toolA = _getToolData(valA);
+  const toolB = _getToolData(valB);
+  if (!toolA || !toolB) return;
+
+  el.innerHTML = _buildCompareGrid(toolA, toolB);
+  logActivity(`Compared <strong>${toolA.name}</strong> vs <strong>${toolB.name}</strong>`, 'purple');
+}
+
+function _buildCompareGrid(a, b) {
+  const styleA = getCatStyle(a.category);
+  const styleB = getCatStyle(b.category);
+
+  /* Cost badges */
+  const costA = a.cost || 0;
+  const costB = b.cost || 0;
+  let badgeA = '', badgeB = '';
+  if      (costA === 0 && costB === 0) { badgeA = '<span class="compare-badge compare-badge-free">Free</span>';   badgeB = '<span class="compare-badge compare-badge-free">Free</span>'; }
+  else if (costA === 0)                { badgeA = '<span class="compare-badge compare-badge-value">Free</span>';  badgeB = '<span class="compare-badge compare-badge-pricey">Paid</span>'; }
+  else if (costB === 0)                { badgeA = '<span class="compare-badge compare-badge-pricey">Paid</span>'; badgeB = '<span class="compare-badge compare-badge-value">Free</span>'; }
+  else if (costA < costB)              { badgeA = '<span class="compare-badge compare-badge-value">Better Value</span>'; }
+  else if (costB < costA)              { badgeB = '<span class="compare-badge compare-badge-value">Better Value</span>'; }
+  else                                 { badgeA = '<span class="compare-badge compare-badge-same">Same Price</span>'; badgeB = '<span class="compare-badge compare-badge-same">Same Price</span>'; }
+
+  /* Features */
+  const featsAHtml = a.features.length
+    ? a.features.map(f => `<span class="compare-feat-chip">${f}</span>`).join('')
+    : `<span class="compare-none-text">No feature data</span>`;
+  const featsBHtml = b.features.length
+    ? b.features.map(f => `<span class="compare-feat-chip">${f}</span>`).join('')
+    : `<span class="compare-none-text">No feature data</span>`;
+
+  /* Feature count badge */
+  const fcA = a.features.length, fcB = b.features.length;
+  const fcBadgeA = fcA > 0 ? (fcA > fcB ? `<span class="compare-badge compare-badge-value" style="margin-bottom:8px;display:inline-flex">${fcA} features</span><br>` : `<span style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:6px">${fcA} features</span>`) : '';
+  const fcBadgeB = fcB > 0 ? (fcB > fcA ? `<span class="compare-badge compare-badge-value" style="margin-bottom:8px;display:inline-flex">${fcB} features</span><br>` : `<span style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:6px">${fcB} features</span>`) : '';
+
+  /* Tags — highlight shared */
+  const sharedTags = a.tags.filter(t => b.tags.includes(t));
+  const tagsAHtml  = a.tags.length
+    ? a.tags.map(t => `<span class="compare-tag-chip ${sharedTags.includes(t) ? 'shared' : ''}">${t}</span>`).join('')
+    : `<span class="compare-none-text">No tags</span>`;
+  const tagsBHtml  = b.tags.length
+    ? b.tags.map(t => `<span class="compare-tag-chip ${sharedTags.includes(t) ? 'shared' : ''}">${t}</span>`).join('')
+    : `<span class="compare-none-text">No tags</span>`;
+
+  /* Category row: note if same */
+  const sameCategory = a.category === b.category;
+  const sameCatNote  = sameCategory
+    ? `<div style="grid-column:1/-1;padding:6px 18px 10px;font-size:11px;color:var(--amber);background:var(--amber-dim);border-top:1px solid var(--border)">
+        Same category — these tools likely overlap. See the <button onclick="navigate('overlap')" style="background:none;border:none;color:var(--amber);text-decoration:underline;cursor:pointer;font-size:11px;padding:0">Overlap Detector</button> for details.
+       </div>`
+    : '';
+
+  /* Website */
+  const websiteA = a.website
+    ? `<a href="https://${a.website.replace(/^https?:\/\//,'')}" target="_blank" rel="noopener"
+         style="color:var(--accent-lt);text-decoration:none;font-size:13px"
+         onclick="event.stopPropagation()">${a.website.replace(/^https?:\/\//,'').replace(/\/$/,'')}</a>`
+    : `<span class="compare-none-text">—</span>`;
+  const websiteB = b.website
+    ? `<a href="https://${b.website.replace(/^https?:\/\//,'')}" target="_blank" rel="noopener"
+         style="color:var(--accent-lt);text-decoration:none;font-size:13px"
+         onclick="event.stopPropagation()">${b.website.replace(/^https?:\/\//,'').replace(/\/$/,'')}</a>`
+    : `<span class="compare-none-text">—</span>`;
+
+  return `
+    <div class="compare-grid">
+
+      <!-- Tool header row -->
+      <div class="compare-row-header">
+        <div class="compare-empty-cell"></div>
+
+        <div class="compare-tool-header" style="border-top:3px solid ${styleA.color}">
+          <div class="compare-tool-name">${a.name}</div>
+          <div class="compare-tool-meta">
+            <span style="background:${styleA.bg};color:${styleA.color};border:1px solid ${styleA.color}44;
+              padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600">${a.category}</span>
+            ${a.source === 'stack' ? '<span style="font-size:10px;color:var(--text-dim);background:var(--surface);padding:2px 7px;border-radius:4px;border:1px solid var(--border)">My Stack</span>' : ''}
+          </div>
+          <div class="compare-cost-row">
+            <span class="compare-cost-value">${a.costLabel}</span>
+            ${badgeA}
+          </div>
+        </div>
+
+        <div class="compare-tool-header" style="border-top:3px solid ${styleB.color}">
+          <div class="compare-tool-name">${b.name}</div>
+          <div class="compare-tool-meta">
+            <span style="background:${styleB.bg};color:${styleB.color};border:1px solid ${styleB.color}44;
+              padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600">${b.category}</span>
+            ${b.source === 'stack' ? '<span style="font-size:10px;color:var(--text-dim);background:var(--surface);padding:2px 7px;border-radius:4px;border:1px solid var(--border)">My Stack</span>' : ''}
+          </div>
+          <div class="compare-cost-row">
+            <span class="compare-cost-value">${b.costLabel}</span>
+            ${badgeB}
+          </div>
+        </div>
+      </div>
+
+      ${sameCatNote}
+
+      <!-- About row -->
+      <div class="compare-row">
+        <div class="compare-label-cell">About</div>
+        <div class="compare-data-cell">${a.description || '<span class="compare-none-text">—</span>'}</div>
+        <div class="compare-data-cell">${b.description || '<span class="compare-none-text">—</span>'}</div>
+      </div>
+
+      <!-- Features row -->
+      <div class="compare-row">
+        <div class="compare-label-cell">Features</div>
+        <div class="compare-data-cell">${fcBadgeA}<div class="compare-features-list">${featsAHtml}</div></div>
+        <div class="compare-data-cell">${fcBadgeB}<div class="compare-features-list">${featsBHtml}</div></div>
+      </div>
+
+      <!-- Tags row -->
+      <div class="compare-row">
+        <div class="compare-label-cell">Tags</div>
+        <div class="compare-data-cell"><div class="compare-tags-list">${tagsAHtml}</div></div>
+        <div class="compare-data-cell"><div class="compare-tags-list">${tagsBHtml}</div></div>
+      </div>
+
+      <!-- Website row -->
+      <div class="compare-row">
+        <div class="compare-label-cell">Website</div>
+        <div class="compare-data-cell">${websiteA}</div>
+        <div class="compare-data-cell">${websiteB}</div>
+      </div>
+
+    </div>`;
+}

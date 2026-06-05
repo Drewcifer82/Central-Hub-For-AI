@@ -1309,6 +1309,231 @@
       .gap-suggestion { flex-direction: column; }
     }
 
+    /* ─── Compare Tools ────────────────────────────────────────── */
+    .compare-hero {
+      background: linear-gradient(135deg, #0e1a3a 0%, #1a1030 100%);
+      border: 1px solid var(--border-lt);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      margin-bottom: 20px;
+    }
+
+    .compare-hero h2 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+    .compare-hero p  { font-size: 13px; color: var(--text-md); max-width: 500px; line-height: 1.7; }
+
+    .compare-selectors {
+      display: flex;
+      align-items: flex-end;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .compare-selector-wrap { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+
+    .compare-selector-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-dim);
+    }
+
+    .compare-select {
+      width: 100%;
+      padding: 10px 12px;
+      background: var(--card);
+      border: 1px solid var(--border-lt);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .compare-select:focus { border-color: var(--accent); }
+
+    .compare-vs {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent);
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-lt);
+      letter-spacing: 0.05em;
+      margin-bottom: 2px;
+    }
+
+    .compare-grid {
+      display: flex;
+      flex-direction: column;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .compare-row-header,
+    .compare-row {
+      display: grid;
+      grid-template-columns: 110px 1fr 1fr;
+    }
+
+    .compare-row { border-top: 1px solid var(--border); }
+
+    .compare-empty-cell {
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+    }
+
+    .compare-tool-header {
+      padding: 18px 20px;
+      border-right: 1px solid var(--border);
+    }
+    .compare-tool-header:last-child { border-right: none; }
+
+    .compare-tool-name {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .compare-tool-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .compare-cost-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .compare-cost-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .compare-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .compare-badge-value  { background: var(--teal-dim);  color: var(--teal); }
+    .compare-badge-pricey { background: var(--amber-dim); color: var(--amber); }
+    .compare-badge-free   { background: var(--teal-dim);  color: var(--teal); }
+    .compare-badge-same   { background: var(--card);       color: var(--text-dim); border: 1px solid var(--border); }
+
+    .compare-label-cell {
+      padding: 14px 16px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-dim);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      padding-top: 16px;
+    }
+
+    .compare-data-cell {
+      padding: 14px 18px;
+      font-size: 13px;
+      color: var(--text-md);
+      line-height: 1.65;
+      border-right: 1px solid var(--border);
+    }
+    .compare-data-cell:last-child { border-right: none; }
+
+    .compare-features-list,
+    .compare-tags-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .compare-feat-chip {
+      display: inline-flex;
+      padding: 3px 9px;
+      border-radius: 20px;
+      font-size: 11px;
+      background: var(--surface);
+      color: var(--text-md);
+      border: 1px solid var(--border);
+    }
+
+    .compare-tag-chip {
+      display: inline-flex;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      background: var(--surface);
+      color: var(--text-dim);
+      border: 1px solid var(--border);
+    }
+
+    .compare-tag-chip.shared {
+      background: var(--teal-dim);
+      color: var(--teal);
+      border-color: var(--teal)44;
+    }
+
+    .compare-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 60px 20px;
+      text-align: center;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .compare-empty-icon {
+      width: 52px; height: 52px;
+      border-radius: 12px;
+      background: var(--card);
+      border: 1px solid var(--border-lt);
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .compare-empty-icon svg { width: 22px; height: 22px; color: var(--text-dim); }
+    .compare-empty h3 { font-size: 15px; font-weight: 600; }
+    .compare-empty p  { font-size: 13px; color: var(--text-dim); max-width: 260px; line-height: 1.7; }
+
+    .compare-none-text { font-size: 12px; color: var(--text-dim); font-style: italic; }
+
+    @media (max-width: 700px) {
+      .compare-selectors { flex-direction: column; }
+      .compare-vs { width: 100%; height: 28px; border-radius: 6px; }
+      .compare-row-header,
+      .compare-row { grid-template-columns: 80px 1fr 1fr; }
+      .compare-label-cell { padding: 12px 10px; font-size: 10px; }
+      .compare-data-cell  { padding: 12px 12px; }
+      .compare-tool-header { padding: 14px 12px; }
+    }
+
     /* ─── API Key Modal ─────────────────────────────────────────── */
     .modal-overlay {
       position: fixed; inset: 0;
@@ -2231,19 +2456,33 @@
       </div>
 
       <!-- ══════════════════════════════════════════════════════ -->
-      <!-- PAGE: Compare (placeholder)                           -->
+      <!-- PAGE: Compare Tools                                   -->
       <!-- ══════════════════════════════════════════════════════ -->
       <div class="page" id="page-compare">
-        <div class="placeholder-page">
-          <div class="big-icon">
-            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-              <path d="M18 20V10M12 20V4M6 20v-6"/>
-            </svg>
-          </div>
+
+        <div class="compare-hero">
           <h2>Compare Tools</h2>
-          <p>Pick any two tools and get a side-by-side Claude-powered breakdown of capabilities, pricing, and fit.</p>
-          <span class="coming-soon-tag">Building Soon</span>
+          <p>Pick any two tools for a side-by-side breakdown of features, pricing, and how they differ. Shared tags are highlighted in teal.</p>
         </div>
+
+        <div class="compare-selectors">
+          <div class="compare-selector-wrap">
+            <label class="compare-selector-label">Tool A</label>
+            <select class="compare-select" id="compare-tool-a" onchange="renderCompare()">
+              <option value="">Choose a tool…</option>
+            </select>
+          </div>
+          <div class="compare-vs">VS</div>
+          <div class="compare-selector-wrap">
+            <label class="compare-selector-label">Tool B</label>
+            <select class="compare-select" id="compare-tool-b" onchange="renderCompare()">
+              <option value="">Choose a tool…</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="compare-results"></div>
+
       </div>
 
     </div><!-- /content -->
@@ -2328,6 +2567,7 @@
     if (page === 'catalog') renderCatalog();
     if (page === 'overlap') initOverlap();
     if (page === 'gaps')    initGaps();
+    if (page === 'compare') initCompare();
   };
   initCatalog();
 </script>
