@@ -1861,6 +1861,161 @@
     }
     .sidebar-backdrop.show { display: block; }
 
+    /* ─── Stack Templates ───────────────────────────────────────── */
+    .templates-hero {
+      background: linear-gradient(135deg, var(--accent-dim) 0%, #1a1428 100%);
+      border: 1px solid var(--accent)33; border-radius: var(--radius);
+      padding: 24px 28px; display: flex; align-items: center;
+      justify-content: space-between; gap: 20px; margin-bottom: 20px;
+    }
+    .templates-hero h2 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+    .templates-hero p  { font-size: 13px; color: var(--text-md); max-width: 460px; line-height: 1.7; }
+
+    .templates-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+    .template-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden; cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      display: flex; flex-direction: column;
+    }
+    .template-card:hover { border-color: var(--border-lt); background: var(--card-hover); }
+    .template-card-accent { height: 4px; flex-shrink: 0; }
+    .template-card-body { padding: 18px 18px 12px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
+    .template-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+    .template-name { font-size: 15px; font-weight: 700; color: var(--white); }
+    .template-persona {
+      font-size: 10px; font-weight: 600; padding: 2px 8px;
+      border-radius: 20px; white-space: nowrap; flex-shrink: 0;
+    }
+    .template-desc { font-size: 12px; color: var(--text-md); line-height: 1.6; flex: 1; }
+    .template-tools-row { display: flex; flex-wrap: wrap; gap: 5px; }
+    .template-tool-chip {
+      font-size: 11px; font-weight: 500; padding: 3px 9px;
+      border-radius: 20px; border: 1px solid transparent;
+    }
+    .template-card-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 18px; border-top: 1px solid var(--border); flex-shrink: 0;
+    }
+    .template-cost { font-size: 14px; font-weight: 700; color: var(--teal); }
+    .template-cost span { font-size: 11px; font-weight: 400; color: var(--text-dim); }
+
+    /* ─── Workflow Builder ───────────────────────────────────────── */
+    .workflow-page-hero {
+      background: linear-gradient(135deg, #0a1a1a 0%, #0a1428 100%);
+      border: 1px solid var(--border-lt); border-radius: var(--radius);
+      padding: 24px 28px; margin-bottom: 20px;
+    }
+    .workflow-page-hero h2 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+    .workflow-page-hero p  { font-size: 13px; color: var(--text-md); max-width: 520px; line-height: 1.7; }
+
+    .workflow-header {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .workflow-name-input {
+      flex: 1; min-width: 180px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 8px 12px;
+      font-size: 14px; font-weight: 600; color: var(--white); font-family: inherit;
+    }
+    .workflow-name-input:focus { outline: none; border-color: var(--accent); }
+    .workflow-name-input::placeholder { color: var(--text-dim); font-weight: 400; }
+
+    .workflow-chain-wrapper {
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 16px; min-height: 200px;
+    }
+    .workflow-chain {
+      display: flex; align-items: stretch; gap: 0;
+      overflow-x: auto; padding-bottom: 8px;
+    }
+    .workflow-chain::-webkit-scrollbar { height: 4px; }
+    .workflow-chain::-webkit-scrollbar-track { background: var(--surface); }
+    .workflow-chain::-webkit-scrollbar-thumb { background: var(--border-lt); border-radius: 2px; }
+
+    .wf-step-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 12px 12px 10px;
+      min-width: 154px; max-width: 172px;
+      display: flex; flex-direction: column; gap: 7px;
+      flex-shrink: 0; transition: border-color 0.15s;
+    }
+    .wf-step-card:hover { border-color: var(--border-lt); }
+    .wf-step-header { display: flex; align-items: center; gap: 6px; }
+    .wf-step-num {
+      width: 20px; height: 20px; border-radius: 50%;
+      background: var(--card); border: 1px solid var(--border-lt);
+      font-size: 10px; font-weight: 700; color: var(--text-dim);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .wf-role-badge {
+      font-size: 9px; font-weight: 700; padding: 2px 7px;
+      border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .wf-step-tool { font-size: 13px; font-weight: 600; color: var(--white); line-height: 1.3; }
+    .wf-step-cat {
+      font-size: 10px; padding: 2px 7px; border-radius: 20px;
+      border: 1px solid transparent; font-weight: 500; display: inline-flex;
+    }
+    .wf-step-note {
+      font-size: 11px; color: var(--text-md); line-height: 1.5; flex: 1;
+      overflow: hidden; display: -webkit-box;
+      -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+    }
+    .wf-step-remove {
+      background: none; border: none; cursor: pointer;
+      color: var(--text-dim); font-size: 11px; padding: 2px 0;
+      text-align: left; transition: color 0.15s; align-self: flex-start; font-family: inherit;
+    }
+    .wf-step-remove:hover { color: var(--red); }
+
+    .wf-arrow {
+      display: flex; align-items: center; justify-content: center;
+      padding: 0 5px; color: var(--text-dim); flex-shrink: 0;
+    }
+    .wf-arrow svg { width: 16px; height: 16px; }
+
+    .wf-add-card {
+      background: transparent; border: 2px dashed var(--border-lt);
+      border-radius: var(--radius); padding: 12px;
+      min-width: 110px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 7px;
+      cursor: pointer; transition: border-color 0.15s, background 0.15s;
+      flex-shrink: 0;
+    }
+    .wf-add-card:hover { border-color: var(--accent); background: var(--accent-dim); }
+    .wf-add-card svg { width: 20px; height: 20px; color: var(--text-dim); }
+    .wf-add-card:hover svg { color: var(--accent-lt); }
+    .wf-add-label { font-size: 11px; color: var(--text-dim); font-weight: 600; text-align: center; }
+    .wf-add-card:hover .wf-add-label { color: var(--accent-lt); }
+
+    .wf-empty {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 10px;
+      padding: 36px; text-align: center; min-height: 168px;
+    }
+    .wf-empty svg { width: 32px; height: 32px; color: var(--text-dim); }
+    .wf-empty h3 { font-size: 14px; font-weight: 600; color: var(--text); }
+    .wf-empty p { font-size: 12px; color: var(--text-dim); max-width: 280px; line-height: 1.6; }
+
+    .saved-wf-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+    .saved-wf-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 10px 14px;
+      cursor: pointer; transition: border-color 0.15s, background 0.15s;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .saved-wf-card:hover { border-color: var(--border-lt); background: var(--card-hover); }
+    .saved-wf-card.wf-active { border-color: var(--accent); background: var(--accent-dim); }
+    .saved-wf-name { font-size: 13px; font-weight: 600; color: var(--text); }
+    .saved-wf-meta { font-size: 11px; color: var(--text-dim); }
+    .saved-wf-del {
+      background: none; border: none; cursor: pointer; color: var(--text-dim);
+      font-size: 16px; padding: 0 2px; transition: color 0.15s; flex-shrink: 0; line-height: 1;
+    }
+    .saved-wf-del:hover { color: var(--red); }
+
     /* ─── Stack Health Band ─────────────────────────────────────── */
     .health-band {
       display: flex;
@@ -2036,6 +2191,7 @@
       .tool-grid      { grid-template-columns: 1fr; }
       .stack-summary  { grid-template-columns: 1fr 1fr; }
       .quick-actions  { grid-template-columns: 1fr; }
+      .templates-grid { grid-template-columns: 1fr; }
 
       /* Stack controls wrap */
       .stack-controls { flex-direction: column; align-items: stretch; gap: 10px; }
@@ -2172,6 +2328,18 @@
         Tool Catalog
       </button>
 
+      <button class="nav-item" onclick="navigate('templates')">
+        <span class="nav-icon">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <rect x="3" y="3" width="7" height="7" rx="1"/>
+            <rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/>
+            <rect x="14" y="14" width="7" height="7" rx="1"/>
+          </svg>
+        </span>
+        Stack Templates
+      </button>
+
       <div class="nav-divider"></div>
       <div class="nav-section-label">AI Features</div>
 
@@ -2220,6 +2388,19 @@
           </svg>
         </span>
         Cost Optimizer
+      </button>
+
+      <div class="nav-divider"></div>
+      <div class="nav-section-label">Build</div>
+
+      <button class="nav-item" onclick="navigate('workflow')">
+        <span class="nav-icon">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/>
+            <path d="M7 12h3M14 12h3"/>
+          </svg>
+        </span>
+        Workflow Builder
       </button>
     </div>
 
@@ -2775,6 +2956,52 @@
 
       </div>
 
+      <!-- ══════════════════════════════════════════════════════ -->
+      <!-- PAGE: Stack Templates                                  -->
+      <!-- ══════════════════════════════════════════════════════ -->
+      <div class="page" id="page-templates">
+
+        <div class="templates-hero">
+          <div>
+            <h2>Stack Templates</h2>
+            <p>Pre-built stacks for common AI workflows. Pick the one that matches your role and load it as a starting point — then customize from there.</p>
+          </div>
+        </div>
+
+        <div id="templates-grid" class="templates-grid"></div>
+
+      </div>
+
+      <!-- ══════════════════════════════════════════════════════ -->
+      <!-- PAGE: Workflow Builder                                 -->
+      <!-- ══════════════════════════════════════════════════════ -->
+      <div class="page" id="page-workflow">
+
+        <div class="workflow-page-hero">
+          <h2>Workflow Builder</h2>
+          <p>Chain your stack tools into a step-by-step pipeline. Name it, save it, and reference it as a repeatable process.</p>
+        </div>
+
+        <div class="workflow-header">
+          <input type="text" id="wf-name-input" class="workflow-name-input" placeholder="Name your workflow…" />
+          <button class="btn btn-primary" onclick="saveWorkflow()">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:14px;height:14px">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+              <path d="M17 21v-8H7v8M7 3v5h8"/>
+            </svg>
+            Save
+          </button>
+          <button class="btn btn-ghost" onclick="newWorkflow()">New</button>
+        </div>
+
+        <div class="workflow-chain-wrapper">
+          <div id="workflow-chain" class="workflow-chain"></div>
+        </div>
+
+        <div id="saved-workflows-section"></div>
+
+      </div>
+
     </div><!-- /content -->
   </div><!-- /main -->
 </div><!-- /app -->
@@ -2911,6 +3138,65 @@
   </div>
 </div>
 
+<!-- ─── Template Preview Modal ──────────────────────────────── -->
+<div class="modal-overlay" id="templatePreviewModal" onclick="if(event.target===this)closeTemplatePreview()">
+  <div class="modal" style="width:min(560px,95vw);max-height:85vh;display:flex;flex-direction:column">
+    <div class="modal-header">
+      <div>
+        <h2 id="tplModalTitle">Template</h2>
+        <p id="tplModalSub">Preview all tools before loading</p>
+      </div>
+      <button class="modal-close" onclick="closeTemplatePreview()">×</button>
+    </div>
+    <div id="tplModalBody" style="overflow-y:auto;flex:1"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:16px;padding-top:14px;border-top:1px solid var(--border);flex-shrink:0">
+      <div style="font-size:12px;color:var(--text-dim)" id="tplModalFooterNote"></div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-ghost" onclick="closeTemplatePreview()">Cancel</button>
+        <button class="btn btn-ghost" id="tplMergeBtn" onclick="loadTemplate(_tplPreviewId,'merge')">Add Missing</button>
+        <button class="btn btn-primary" id="tplReplaceBtn" onclick="loadTemplate(_tplPreviewId,'replace')">Load Template</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Add Workflow Step Modal ──────────────────────────────── -->
+<div class="modal-overlay" id="addStepModal" onclick="if(event.target===this)closeAddStepModal()">
+  <div class="modal" style="width:420px">
+    <div class="modal-header">
+      <div><h2>Add Step</h2><p>Add a tool to your workflow pipeline</p></div>
+      <button class="modal-close" onclick="closeAddStepModal()">×</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Tool</label>
+      <input type="text" class="form-input" id="wf-step-tool" list="wf-tool-datalist" placeholder="Type or pick a tool…" autocomplete="off" />
+      <datalist id="wf-tool-datalist"></datalist>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Role in Workflow</label>
+      <select class="form-input" id="wf-step-role">
+        <option>Input</option>
+        <option>Research</option>
+        <option>Draft</option>
+        <option>Generate</option>
+        <option>Edit</option>
+        <option>Review</option>
+        <option>Automate</option>
+        <option>Distribute</option>
+        <option>Archive</option>
+      </select>
+    </div>
+    <div class="form-group" style="margin-bottom:0">
+      <label class="form-label">Note <span style="color:var(--text-dim);font-weight:400">(optional)</span></label>
+      <input type="text" class="form-input" id="wf-step-note" placeholder="What does this step do?" />
+    </div>
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="btn btn-ghost" onclick="closeAddStepModal()" style="flex:1">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmAddWFStep()" style="flex:2">Add Step</button>
+    </div>
+  </div>
+</div>
+
 <input type="file" id="import-file-input" accept=".json" style="display:none" onchange="importStack(event)">
 
 <!-- ─── Scripts ───────────────────────────────────────────────── -->
@@ -2920,6 +3206,8 @@
 <script src="catalog.js"></script>
 <script src="aifeatures.js"></script>
 <script src="integrations.js"></script>
+<script src="templates.js"></script>
+<script src="workflows.js"></script>
 <script>
   // Page-specific init on navigation
   const _origNavigate = navigate;
@@ -2931,6 +3219,8 @@
     if (page === 'compare')      initCompare();
     if (page === 'integrations') initIntegrations();
     if (page === 'cost')         initCostOptimizer();
+    if (page === 'templates')    initTemplates();
+    if (page === 'workflow')     initWorkflow();
   };
   initCatalog();
 </script>
