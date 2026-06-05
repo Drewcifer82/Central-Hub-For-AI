@@ -1926,6 +1926,16 @@
       .stack-summary { grid-template-columns: 1fr; }
     }
 
+    /* ─── Dashboard Stat Modals ─────────────────────────────────── */
+    .gap-modal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 560px) {
+      .gap-modal-grid { grid-template-columns: 1fr; }
+    }
+
     /* ─── Integration Map ───────────────────────────────────────── */
     .integration-hero {
       background: linear-gradient(135deg, #0a1a3a 0%, #062820 100%);
@@ -2173,7 +2183,7 @@
             <div class="stat-delta" id="stat-spend-delta">Add tools to track costs</div>
           </div>
 
-          <div class="stat-card">
+          <div class="stat-card" onclick="openDashOverlapModal()" style="cursor:pointer">
             <div class="stat-header">
               <span class="stat-label">Overlaps Found</span>
               <div class="stat-icon amber">
@@ -2183,10 +2193,10 @@
               </div>
             </div>
             <div class="stat-value" id="stat-overlaps">—</div>
-            <div class="stat-delta">Run overlap analysis</div>
+            <div class="stat-delta" id="stat-overlap-delta">Run overlap analysis</div>
           </div>
 
-          <div class="stat-card">
+          <div class="stat-card" onclick="openDashGapModal()" style="cursor:pointer">
             <div class="stat-header">
               <span class="stat-label">Gaps Identified</span>
               <div class="stat-icon red">
@@ -2196,7 +2206,7 @@
               </div>
             </div>
             <div class="stat-value" id="stat-gaps">—</div>
-            <div class="stat-delta">Run gap analysis</div>
+            <div class="stat-delta" id="stat-gap-delta">Run gap analysis</div>
           </div>
         </div>
 
@@ -2648,6 +2658,42 @@
         </svg>
         Add to Stack
       </button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Dashboard Overlap Modal ──────────────────────────────── -->
+<div class="modal-overlay" id="dashOverlapModal" onclick="if(event.target===this)closeDashOverlapModal()">
+  <div class="modal" style="width:min(700px,95vw);max-height:85vh;display:flex;flex-direction:column">
+    <div class="modal-header">
+      <div>
+        <h2 id="dashOverlapModalTitle">Overlaps Found</h2>
+        <p>Tools in your stack that compete for the same job</p>
+      </div>
+      <button class="modal-close" onclick="closeDashOverlapModal()">×</button>
+    </div>
+    <div id="dashOverlapModalBody" style="overflow-y:auto;flex:1"></div>
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px;padding-top:14px;border-top:1px solid var(--border);flex-shrink:0">
+      <button class="btn btn-ghost" onclick="closeDashOverlapModal()">Close</button>
+      <button class="btn btn-primary" onclick="closeDashOverlapModal();navigate('overlap')">Full Analysis →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Dashboard Gap Modal ───────────────────────────────────── -->
+<div class="modal-overlay" id="dashGapModal" onclick="if(event.target===this)closeDashGapModal()">
+  <div class="modal" style="width:min(700px,95vw);max-height:85vh;display:flex;flex-direction:column">
+    <div class="modal-header">
+      <div>
+        <h2 id="dashGapModalTitle">Gaps Identified</h2>
+        <p>Tool categories missing from your stack</p>
+      </div>
+      <button class="modal-close" onclick="closeDashGapModal()">×</button>
+    </div>
+    <div id="dashGapModalBody" style="overflow-y:auto;flex:1"></div>
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px;padding-top:14px;border-top:1px solid var(--border);flex-shrink:0">
+      <button class="btn btn-ghost" onclick="closeDashGapModal()">Close</button>
+      <button class="btn btn-teal" onclick="closeDashGapModal();navigate('gaps')">Full Analysis →</button>
     </div>
   </div>
 </div>

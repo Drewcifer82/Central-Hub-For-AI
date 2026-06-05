@@ -857,3 +857,229 @@ function _buildCompareGrid(a, b) {
 
     </div>`;
 }
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   DASHBOARD STAT CARDS — live counts + click-to-expand modals
+   ═══════════════════════════════════════════════════════════════════ */
+
+function refreshOverlapGapStats() {
+  /* ── Overlap count ── */
+  let overlapCount = 0;
+  if (STATE.stack.length >= 2) {
+    const byCat = {};
+    STATE.stack.forEach(t => { (byCat[t.category] = byCat[t.category] || []).push(t); });
+    Object.values(byCat).forEach(tools => { if (tools.length >= 2) overlapCount++; });
+    const userCats = new Set(STATE.stack.map(t => t.category));
+    _CROSS_OVERLAPS.forEach(p => { if (userCats.has(p.cats[0]) && userCats.has(p.cats[1])) overlapCount++; });
+  }
+
+  /* ── Gap count ── */
+  const covered  = new Set(STATE.stack.map(t => t.category).filter(c => _ALL_CATEGORIES.includes(c)));
+  const gapCount = _ALL_CATEGORIES.filter(c => !covered.has(c)).length;
+
+  /* ── DOM ── */
+  const oEl    = document.getElementById('stat-overlaps');
+  const oDelta = document.getElementById('stat-overlap-delta');
+  const gEl    = document.getElementById('stat-gaps');
+  const gDelta = document.getElementById('stat-gap-delta');
+
+  if (oEl) oEl.textContent = STATE.stack.length < 2 ? '—' : overlapCount;
+  if (oDelta) oDelta.textContent = STATE.stack.length < 2
+    ? 'Add 2+ tools to detect'
+    : overlapCount === 0 ? 'No overlaps — clean stack!' : 'Click to view details';
+
+  if (gEl) gEl.textContent = STATE.stack.length === 0 ? '—' : gapCount;
+  if (gDelta) gDelta.textContent = STATE.stack.length === 0
+    ? 'Add tools to find gaps'
+    : gapCount === 0 ? 'Full coverage!' : 'Click to view details';
+}
+
+/* Keep counts live whenever tools are added/removed */
+const _origRefreshStatsAI = refreshStats;
+refreshStats = function() {
+  _origRefreshStatsAI();
+  refreshOverlapGapStats();
+};
+refreshOverlapGapStats();
+
+
+/* ── Dashboard Overlap Modal ── */
+
+function openDashOverlapModal() {
+  if (STATE.stack.length < 2) { navigate('overlap'); return; }
+
+  /* Build overlaps (same logic as runOverlapDetector) */
+  const overlaps = [];
+  const byCat = {};
+  STATE.stack.forEach(t => { (byCat[t.category] = byCat[t.category] || []).push(t); });
+  Object.entries(byCat).forEach(([cat, tools]) => {
+    if (tools.length < 2) return;
+    overlaps.push({
+      title: `${tools.length} ${cat} tools`,
+      tools: tools.map(t => t.name),
+      severity: 'high',
+      overlap_reason: `You have ${tools.length} tools in the same category (${cat}) — they likely handle the same core job.`,
+      recommendation: _SAME_CAT_RECS[cat] || 'Audit which tool you reach for most and consider cutting the others.',
+    });
+  });
+  const userCats = new Set(STATE.stack.map(t => t.category));
+  _CROSS_OVERLAPS.forEach(pair => {
+    const [catA, catB] = pair.cats;
+    if (!userCats.has(catA) || !userCats.has(catB)) return;
+    overlaps.push({
+      title: pair.title,
+      tools: [
+        ...STATE.stack.filter(t => t.category === catA).map(t => t.name),
+        ...STATE.stack.filter(t => t.category === catB).map(t => t.name),
+      ],
+      severity: pair.severity,
+      overlap_reason: pair.reason,
+      recommendation: pair.rec,
+    });
+  });
+  const order = { high: 0, medium: 1, low: 2 };
+  overlaps.sort((a, b) => order[a.severity] - order[b.severity]);
+
+  document.getElementById('dashOverlapModalTitle').textContent = `Overlaps Found (${overlaps.length})`;
+  document.getElementById('dashOverlapModalBody').innerHTML   = _renderDashOverlapBody(overlaps);
+  document.getElementById('dashOverlapModal').classList.add('open');
+}
+
+function closeDashOverlapModal() {
+  document.getElementById('dashOverlapModal').classList.remove('open');
+}
+
+function _renderDashOverlapBody(overlaps) {
+  if (overlaps.length === 0) {
+    return `<div class="alt-empty">No overlaps found — your stack is well-diversified.</div>`;
+  }
+
+  return overlaps.map(group => {
+    const isHigh   = group.severity === 'high';
+    const isMed    = group.severity === 'medium';
+    const color    = isHigh ? 'var(--red)' : isMed ? 'var(--amber)' : 'var(--text-dim)';
+    const colorDim = isHigh ? 'var(--red-dim)' : isMed ? 'var(--amber-dim)' : 'var(--card)';
+    const label    = isHigh ? 'HIGH' : isMed ? 'MED' : 'LOW';
+
+    let toolsHTML;
+    if (group.tools.length === 2) {
+      const [nA, nB] = group.tools;
+      const tA = STATE.stack.find(t => t.name.toLowerCase() === nA.toLowerCase());
+      const tB = STATE.stack.find(t => t.name.toLowerCase() === nB.toLowerCase());
+      const sA = tA ? getCatStyle(tA.category) : null;
+      const sB = tB ? getCatStyle(tB.category) : null;
+      const cA = CATALOG.find(c => c.name.toLowerCase() === nA.toLowerCase());
+      const cB = CATALOG.find(c => c.name.toLowerCase() === nB.toLowerCase());
+      const compareBtn = (cA && cB)
+        ? `<div style="text-align:center;margin-top:10px">
+             <button class="btn btn-ghost" style="font-size:11px;padding:5px 12px"
+               onclick="closeDashOverlapModal();navigateToCompare('catalog:${cA.id}','catalog:${cB.id}')">
+               Compare side-by-side →
+             </button>
+           </div>`
+        : '';
+      toolsHTML = `
+        <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;margin-bottom:8px">
+          <div style="background:${sA?sA.bg:'var(--surface)'};border:1px solid ${sA?sA.color+'44':'var(--border)'};border-radius:var(--radius-sm);padding:10px 12px;text-align:center">
+            <div style="font-size:13px;font-weight:600;color:var(--white)">${nA}</div>
+            ${sA ? `<div style="font-size:11px;color:${sA.color};margin-top:3px">${sA.label}</div>` : ''}
+            ${tA ? `<div style="font-size:12px;color:var(--teal);font-weight:600;margin-top:2px">${tA.cost ? '$'+tA.cost+'/mo' : 'Free'}</div>` : ''}
+          </div>
+          <div style="color:var(--text-dim);font-size:12px;font-weight:700;flex-shrink:0">VS</div>
+          <div style="background:${sB?sB.bg:'var(--surface)'};border:1px solid ${sB?sB.color+'44':'var(--border)'};border-radius:var(--radius-sm);padding:10px 12px;text-align:center">
+            <div style="font-size:13px;font-weight:600;color:var(--white)">${nB}</div>
+            ${sB ? `<div style="font-size:11px;color:${sB.color};margin-top:3px">${sB.label}</div>` : ''}
+            ${tB ? `<div style="font-size:12px;color:var(--teal);font-weight:600;margin-top:2px">${tB.cost ? '$'+tB.cost+'/mo' : 'Free'}</div>` : ''}
+          </div>
+        </div>
+        ${compareBtn}`;
+    } else {
+      toolsHTML = `<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px">
+        ${group.tools.map(name => {
+          const tool = STATE.stack.find(t => t.name.toLowerCase() === name.toLowerCase());
+          const cs   = tool ? getCatStyle(tool.category) : null;
+          const st   = cs
+            ? `background:${cs.bg};color:${cs.color};border:1px solid ${cs.color}44`
+            : `background:var(--card);color:var(--text-md);border:1px solid var(--border)`;
+          return `<span style="${st};padding:3px 10px;border-radius:20px;font-size:12px;font-weight:500">${name}</span>`;
+        }).join('')}
+      </div>`;
+    }
+
+    return `
+      <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid ${color};border-radius:var(--radius-sm);padding:14px;margin-bottom:12px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+          <span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;background:${colorDim};color:${color}">${label}</span>
+          <span style="font-size:13px;font-weight:600;color:var(--text)">${group.title}</span>
+        </div>
+        ${toolsHTML}
+        <p style="font-size:12px;color:var(--text-md);line-height:1.6;margin-bottom:8px">${group.overlap_reason}</p>
+        <div style="font-size:11px;color:var(--accent-lt);background:var(--accent-dim);padding:8px 10px;border-radius:var(--radius-sm);line-height:1.5">${group.recommendation}</div>
+      </div>`;
+  }).join('');
+}
+
+
+/* ── Dashboard Gap Modal ── */
+
+function openDashGapModal() {
+  if (STATE.stack.length === 0) { navigate('stack'); return; }
+
+  const covered = _coveredCategories();
+  const missing = _ALL_CATEGORIES.filter(c => !covered.has(c));
+
+  const gaps = missing.map(cat => {
+    const entryTool = CATALOG.find(t => t.id === _BEST_ENTRY[cat]);
+    return {
+      category:       cat,
+      priority:       _gapPriority(cat, covered),
+      why_it_matters: _gapWhyText(cat, covered),
+      suggested_tool: entryTool ? entryTool.name      : cat,
+      suggested_cost: entryTool ? entryTool.costLabel : '',
+    };
+  });
+  const order = { high: 0, medium: 1, low: 2 };
+  gaps.sort((a, b) => order[a.priority] - order[b.priority]);
+
+  document.getElementById('dashGapModalTitle').textContent = `Gaps Identified (${gaps.length})`;
+  document.getElementById('dashGapModalBody').innerHTML   = _renderDashGapBody(gaps);
+  document.getElementById('dashGapModal').classList.add('open');
+}
+
+function closeDashGapModal() {
+  document.getElementById('dashGapModal').classList.remove('open');
+}
+
+function _renderDashGapBody(gaps) {
+  if (gaps.length === 0) {
+    return `<div class="alt-empty">Full coverage — your stack covers all major tool categories!</div>`;
+  }
+
+  return `<div class="gap-modal-grid">` +
+    gaps.map(gap => {
+      const cs        = getCatStyle(gap.category);
+      const prio      = gap.priority || 'medium';
+      const prioBg    = prio === 'high' ? 'var(--red-dim)'   : prio === 'medium' ? 'var(--amber-dim)' : 'var(--card)';
+      const prioColor = prio === 'high' ? 'var(--red)'       : prio === 'medium' ? 'var(--amber)'     : 'var(--text-dim)';
+      return `
+        <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid ${cs.color};border-radius:var(--radius-sm);padding:12px;display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+            <span style="background:${cs.bg};color:${cs.color};border:1px solid ${cs.color}44;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600">${gap.category}</span>
+            <span style="background:${prioBg};color:${prioColor};font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px">${prio.toUpperCase()}</span>
+          </div>
+          <p style="font-size:12px;color:var(--text-md);line-height:1.6;flex:1">${gap.why_it_matters}</p>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--teal-dim);border-radius:var(--radius-sm);padding:8px 10px;border:1px solid #00d4aa22">
+            <div>
+              <div style="font-size:12px;font-weight:600;color:var(--teal)">${gap.suggested_tool}</div>
+              ${gap.suggested_cost ? `<div style="font-size:11px;color:var(--text-dim)">${gap.suggested_cost}</div>` : ''}
+            </div>
+            <button class="btn btn-ghost" style="font-size:11px;padding:4px 9px;flex-shrink:0;white-space:nowrap"
+              onclick="closeDashGapModal();browseGapCategory('${gap.category.replace(/'/g, "\\'")}')">
+              Browse →
+            </button>
+          </div>
+        </div>`;
+    }).join('') +
+  `</div>`;
+}
