@@ -69,6 +69,7 @@ function saveToolToStack() {
     useCase:  usecase,
     website:  website || '',
     features: [],
+    tier:     'Primary',
     addedAt:  new Date().toISOString(),
   });
 
@@ -172,6 +173,9 @@ function renderStack() {
          </div>`
       : '';
 
+    const tier      = t.tier || 'Primary';
+    const tierClass = 'tier-' + tier.toLowerCase();
+
     return `
       <div class="tool-card" data-id="${t.id}">
         <div class="tool-card-accent" style="background:${style.color}"></div>
@@ -182,6 +186,7 @@ function renderStack() {
           </div>
           <div class="tool-meta">
             <span class="cat-badge" style="background:${style.bg};color:${style.color}">${style.label}</span>
+            <span class="tier-badge ${tierClass}" onclick="setTier(${t.id})" title="Click to change tier">${tier}</span>
           </div>
           <div class="tool-use-case">${t.useCase}</div>
           ${featuresHTML}
@@ -189,6 +194,11 @@ function renderStack() {
         <div class="tool-card-footer">
           ${footer}
           <div class="tool-actions">
+            <button class="tool-btn" onclick="openAlternatives(${t.id})" title="Find alternatives">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4"/>
+              </svg>
+            </button>
             <button class="tool-btn delete" onclick="confirmDeleteTool(${t.id})" title="Remove">
               <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/>
@@ -205,6 +215,145 @@ function renderStack() {
         </div>
       </div>`;
   }).join('') + `</div>`;
+}
+
+/* ── Tier ── */
+function setTier(id) {
+  const tool = STATE.stack.find(t => t.id === id);
+  if (!tool) return;
+  const tiers = ['Primary', 'Secondary', 'Evaluating'];
+  const cur   = tiers.indexOf(tool.tier || 'Primary');
+  tool.tier   = tiers[(cur + 1) % tiers.length];
+  localStorage.setItem('aiHub_stack', JSON.stringify(STATE.stack));
+  renderStack();
+}
+
+/* ── Export ── */
+function exportStack() {
+  if (STATE.stack.length === 0) {
+    alert('Your stack is empty — nothing to export.');
+    return;
+  }
+  const blob = new Blob([JSON.stringify(STATE.stack, null, 2)], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = 'ai-stack-' + new Date().toISOString().slice(0, 10) + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  logActivity('Exported stack as JSON', 'teal');
+}
+
+/* ── Import ── */
+function importStack(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  event.target.value = '';
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    let parsed;
+    try { parsed = JSON.parse(e.target.result); }
+    catch { alert('Invalid JSON file. Please use a file exported from Central Hub For AI.'); return; }
+
+    if (!Array.isArray(parsed)) { alert('Invalid format — expected an array of tools.'); return; }
+
+    const valid = parsed.filter(t => t && typeof t.name === 'string' && t.name.trim());
+    if (valid.length === 0) { alert('No valid tools found in the file.'); return; }
+
+    const msg = STATE.stack.length > 0
+      ? `This will replace your ${STATE.stack.length} current tool${STATE.stack.length !== 1 ? 's' : ''} with ${valid.length} imported tool${valid.length !== 1 ? 's' : ''}. Continue?`
+      : `Import ${valid.length} tool${valid.length !== 1 ? 's' : ''}?`;
+    if (!confirm(msg)) return;
+
+    STATE.stack = valid.map(t => ({
+      id:        t.id        || Date.now() + Math.random(),
+      catalogId: t.catalogId || undefined,
+      name:      t.name.trim(),
+      cost:      parseFloat(t.cost) || 0,
+      category:  t.category || 'Other',
+      useCase:   t.useCase  || '',
+      website:   t.website  || '',
+      features:  Array.isArray(t.features) ? t.features : [],
+      tier:      t.tier     || 'Primary',
+      addedAt:   t.addedAt  || new Date().toISOString(),
+    }));
+
+    localStorage.setItem('aiHub_stack', JSON.stringify(STATE.stack));
+    renderStack();
+    refreshStats();
+    logActivity(`Imported ${valid.length} tool${valid.length !== 1 ? 's' : ''} from file`, 'teal');
+  };
+  reader.readAsText(file);
+}
+
+/* ── Alternative Finder ── */
+function openAlternatives(toolId) {
+  const tool = STATE.stack.find(t => t.id === toolId);
+  if (!tool) return;
+
+  const alts = CATALOG
+    .filter(c => c.category === tool.category && !isInStack(c.id))
+    .sort((a, b) => (a.cost || 0) - (b.cost || 0))
+    .slice(0, 6);
+
+  document.getElementById('altModalTitle').textContent = `Alternatives to ${tool.name}`;
+  document.getElementById('altModalSub').textContent   = `${tool.category} tools not currently in your stack`;
+
+  const body = document.getElementById('alt-list-body');
+
+  if (alts.length === 0) {
+    body.innerHTML = `<div class="alt-empty">All <strong>${tool.category}</strong> tools in the catalog are already in your stack.</div>`;
+  } else {
+    body.innerHTML = `<div class="alt-list">` + alts.map(c => {
+      const isFree = !c.cost || c.cost === 0;
+      return `
+        <div class="alt-item">
+          <div class="alt-item-info">
+            <div class="alt-item-name">${c.name}</div>
+            <div class="alt-item-cost">${isFree ? 'Free' : c.costLabel}</div>
+            <div class="alt-item-desc">${c.description}</div>
+          </div>
+          <button class="btn btn-add-catalog" style="font-size:11px;padding:5px 11px;flex-shrink:0"
+            onclick="addFromAlternativesModal('${c.id}')">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:12px;height:12px">
+              <path d="M12 5v14M5 12h14"/>
+            </svg>
+            Add
+          </button>
+        </div>`;
+    }).join('') + `</div>`;
+  }
+
+  document.getElementById('alternativesModal').classList.add('open');
+}
+
+function closeAlternativesModal() {
+  document.getElementById('alternativesModal').classList.remove('open');
+}
+
+function addFromAlternativesModal(catalogId) {
+  const tool = CATALOG.find(t => t.id === catalogId);
+  if (!tool || isInStack(catalogId)) return;
+
+  STATE.stack.push({
+    id:        Date.now(),
+    catalogId: tool.id,
+    name:      tool.name,
+    cost:      tool.cost,
+    category:  tool.category,
+    useCase:   tool.description,
+    website:   tool.website  || '',
+    features:  tool.features || [],
+    tier:      'Primary',
+    addedAt:   new Date().toISOString(),
+  });
+
+  localStorage.setItem('aiHub_stack', JSON.stringify(STATE.stack));
+  refreshStats();
+  renderStack();
+  logActivity(`Added <strong>${tool.name}</strong> from alternatives`, 'teal');
+  closeAlternativesModal();
 }
 
 /* ── Init ── */

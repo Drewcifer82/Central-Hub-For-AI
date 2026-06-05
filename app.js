@@ -11,7 +11,8 @@ const PAGE_META = {
   catalog: { title: 'Tool Catalog',     sub: 'Browse popular AI tools by category' },
   overlap: { title: 'Overlap Detector', sub: 'Find tools in your stack that do the same job' },
   gaps:    { title: 'Gap Finder',       sub: 'Discover tool categories missing from your stack' },
-  compare: { title: 'Compare Tools',    sub: 'Side-by-side tool comparison' },
+  compare:      { title: 'Compare Tools',    sub: 'Side-by-side tool comparison' },
+  integrations: { title: 'Integration Map', sub: 'See which tools in your stack connect and work together' },
 };
 
 /* ── Navigation ── */

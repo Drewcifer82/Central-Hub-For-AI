@@ -51,8 +51,9 @@ function addFromCatalog(id) {
     cost:      tool.cost,
     category:  tool.category,
     useCase:   tool.description,
-    website:   tool.website || '',
+    website:   tool.website  || '',
     features:  tool.features || [],
+    tier:      'Primary',
     addedAt:   new Date().toISOString(),
   });
 
