@@ -68,22 +68,6 @@ const NAV_CONFIG = [
       },
     ],
   },
-  {
-    section: 'Build',
-    items: [
-      {
-        page:  'workflow',
-        label: 'Workflow Builder',
-        icon:  `<circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/>
-                <path d="M7 12h3M14 12h3"/>`,
-      },
-      {
-        page:  'stackcard',
-        label: 'Stack Card',
-        icon:  `<rect x="3" y="3" width="18" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>`,
-      },
-    ],
-  },
 ];
 
 function buildNav() {

@@ -1901,121 +1901,6 @@
     .template-cost { font-size: 14px; font-weight: 700; color: var(--teal); }
     .template-cost span { font-size: 11px; font-weight: 400; color: var(--text-dim); }
 
-    /* ─── Workflow Builder ───────────────────────────────────────── */
-    .workflow-page-hero {
-      background: linear-gradient(135deg, #0a1a1a 0%, #0a1428 100%);
-      border: 1px solid var(--border-lt); border-radius: var(--radius);
-      padding: 24px 28px; margin-bottom: 20px;
-    }
-    .workflow-page-hero h2 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
-    .workflow-page-hero p  { font-size: 13px; color: var(--text-md); max-width: 520px; line-height: 1.7; }
-
-    .workflow-header {
-      display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap;
-    }
-    .workflow-name-input {
-      flex: 1; min-width: 180px;
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: var(--radius-sm); padding: 8px 12px;
-      font-size: 14px; font-weight: 600; color: var(--white); font-family: inherit;
-    }
-    .workflow-name-input:focus { outline: none; border-color: var(--accent); }
-    .workflow-name-input::placeholder { color: var(--text-dim); font-weight: 400; }
-
-    .workflow-chain-wrapper {
-      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
-      padding: 16px; min-height: 200px;
-    }
-    .workflow-chain {
-      display: flex; align-items: stretch; gap: 0;
-      overflow-x: auto; padding-bottom: 8px;
-    }
-    .workflow-chain::-webkit-scrollbar { height: 4px; }
-    .workflow-chain::-webkit-scrollbar-track { background: var(--surface); }
-    .workflow-chain::-webkit-scrollbar-thumb { background: var(--border-lt); border-radius: 2px; }
-
-    .wf-step-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 12px 12px 10px;
-      min-width: 154px; max-width: 172px;
-      display: flex; flex-direction: column; gap: 7px;
-      flex-shrink: 0; transition: border-color 0.15s;
-    }
-    .wf-step-card:hover { border-color: var(--border-lt); }
-    .wf-step-header { display: flex; align-items: center; gap: 6px; }
-    .wf-step-num {
-      width: 20px; height: 20px; border-radius: 50%;
-      background: var(--card); border: 1px solid var(--border-lt);
-      font-size: 10px; font-weight: 700; color: var(--text-dim);
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-    }
-    .wf-role-badge {
-      font-size: 9px; font-weight: 700; padding: 2px 7px;
-      border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em;
-    }
-    .wf-step-tool { font-size: 13px; font-weight: 600; color: var(--white); line-height: 1.3; }
-    .wf-step-cat {
-      font-size: 10px; padding: 2px 7px; border-radius: 20px;
-      border: 1px solid transparent; font-weight: 500; display: inline-flex;
-    }
-    .wf-step-note {
-      font-size: 11px; color: var(--text-md); line-height: 1.5; flex: 1;
-      overflow: hidden; display: -webkit-box;
-      -webkit-line-clamp: 3; -webkit-box-orient: vertical;
-    }
-    .wf-step-remove {
-      background: none; border: none; cursor: pointer;
-      color: var(--text-dim); font-size: 11px; padding: 2px 0;
-      text-align: left; transition: color 0.15s; align-self: flex-start; font-family: inherit;
-    }
-    .wf-step-remove:hover { color: var(--red); }
-
-    .wf-arrow {
-      display: flex; align-items: center; justify-content: center;
-      padding: 0 5px; color: var(--text-dim); flex-shrink: 0;
-    }
-    .wf-arrow svg { width: 16px; height: 16px; }
-
-    .wf-add-card {
-      background: transparent; border: 2px dashed var(--border-lt);
-      border-radius: var(--radius); padding: 12px;
-      min-width: 110px; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 7px;
-      cursor: pointer; transition: border-color 0.15s, background 0.15s;
-      flex-shrink: 0;
-    }
-    .wf-add-card:hover { border-color: var(--accent); background: var(--accent-dim); }
-    .wf-add-card svg { width: 20px; height: 20px; color: var(--text-dim); }
-    .wf-add-card:hover svg { color: var(--accent-lt); }
-    .wf-add-label { font-size: 11px; color: var(--text-dim); font-weight: 600; text-align: center; }
-    .wf-add-card:hover .wf-add-label { color: var(--accent-lt); }
-
-    .wf-empty {
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 10px;
-      padding: 36px; text-align: center; min-height: 168px;
-    }
-    .wf-empty svg { width: 32px; height: 32px; color: var(--text-dim); }
-    .wf-empty h3 { font-size: 14px; font-weight: 600; color: var(--text); }
-    .wf-empty p { font-size: 12px; color: var(--text-dim); max-width: 280px; line-height: 1.6; }
-
-    .saved-wf-grid { display: flex; flex-wrap: wrap; gap: 10px; }
-    .saved-wf-card {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: var(--radius-sm); padding: 10px 14px;
-      cursor: pointer; transition: border-color 0.15s, background 0.15s;
-      display: flex; align-items: center; gap: 10px;
-    }
-    .saved-wf-card:hover { border-color: var(--border-lt); background: var(--card-hover); }
-    .saved-wf-card.wf-active { border-color: var(--accent); background: var(--accent-dim); }
-    .saved-wf-name { font-size: 13px; font-weight: 600; color: var(--text); }
-    .saved-wf-meta { font-size: 11px; color: var(--text-dim); }
-    .saved-wf-del {
-      background: none; border: none; cursor: pointer; color: var(--text-dim);
-      font-size: 16px; padding: 0 2px; transition: color 0.15s; flex-shrink: 0; line-height: 1;
-    }
-    .saved-wf-del:hover { color: var(--red); }
-
     /* ─── Stack Health Band ─────────────────────────────────────── */
     .health-band {
       display: flex;
@@ -2267,35 +2152,6 @@
     }
     .alt-empty { text-align: center; padding: 32px 16px; color: var(--text-dim); font-size: 13px; }
 
-    /* ─── Stack Card Page ─────────────────────────────────────────── */
-    .stackcard-hero {
-      display: flex; align-items: flex-start; justify-content: space-between;
-      margin-bottom: 20px;
-    }
-    .stackcard-hero h2 { font-size: 20px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
-    .stackcard-hero p  { font-size: 13px; color: var(--text-md); max-width: 560px; }
-    .stackcard-customize {
-      display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;
-    }
-    .stackcard-cust-label {
-      font-size: 11px; font-weight: 600; color: var(--text-dim);
-      letter-spacing: 0.07em; text-transform: uppercase; flex-shrink: 0;
-    }
-    .stackcard-cust-hint { font-size: 11px; color: var(--text-dim); }
-    .stackcard-preview-wrap {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 20px;
-      display: flex; align-items: center; justify-content: center;
-      overflow-x: auto; margin-bottom: 14px;
-      box-shadow: inset 0 0 32px rgba(0,0,0,0.3);
-    }
-    .stackcard-actions { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
-    .stackcard-tip {
-      display: flex; align-items: flex-start; gap: 8px;
-      font-size: 12px; color: var(--text-dim); line-height: 1.6;
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: var(--radius-sm); padding: 10px 14px;
-    }
 
     /* ─── Stack Compare Page ──────────────────────────────────────── */
     .scmp-hero {
@@ -2978,86 +2834,6 @@
 
       </div>
 
-      <!-- ══════════════════════════════════════════════════════ -->
-      <!-- PAGE: Workflow Builder                                 -->
-      <!-- ══════════════════════════════════════════════════════ -->
-      <div class="page" id="page-workflow">
-
-        <div class="workflow-page-hero">
-          <h2>Workflow Builder</h2>
-          <p>Chain your stack tools into a step-by-step pipeline. Name it, save it, and reference it as a repeatable process.</p>
-        </div>
-
-        <div class="workflow-header">
-          <input type="text" id="wf-name-input" class="workflow-name-input" placeholder="Name your workflow…" />
-          <button class="btn btn-primary" onclick="saveWorkflow()">
-            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:14px;height:14px">
-              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
-              <path d="M17 21v-8H7v8M7 3v5h8"/>
-            </svg>
-            Save
-          </button>
-          <button class="btn btn-ghost" onclick="newWorkflow()">New</button>
-        </div>
-
-        <div class="workflow-chain-wrapper">
-          <div id="workflow-chain" class="workflow-chain"></div>
-        </div>
-
-        <div id="saved-workflows-section"></div>
-
-      </div>
-
-      <!-- ══════════════════════════════════════════════════════ -->
-      <!-- PAGE: Stack Card                                       -->
-      <!-- ══════════════════════════════════════════════════════ -->
-      <div class="page" id="page-stackcard">
-
-        <div class="stackcard-hero">
-          <div>
-            <h2>Stack Card</h2>
-            <p>Generate a shareable visual card of your AI stack — download it as a PNG to post on Twitter, LinkedIn, or Discord.</p>
-          </div>
-        </div>
-
-        <div class="stackcard-customize">
-          <label class="stackcard-cust-label">Card Title</label>
-          <input type="text" id="sc-card-title-input" class="workflow-name-input"
-            style="max-width:320px" value="My AI Stack" placeholder="My AI Stack"
-            oninput="drawStackCard()" />
-          <span class="stackcard-cust-hint">Edit to customize · card updates live</span>
-        </div>
-
-        <div class="stackcard-preview-wrap">
-          <canvas id="stack-card-canvas" width="1200" height="630"
-            style="max-width:100%;border-radius:10px;display:block;image-rendering:crisp-edges"></canvas>
-        </div>
-
-        <div class="stackcard-actions">
-          <button class="btn btn-primary" onclick="downloadStackCard()">
-            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:14px;height:14px">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
-            </svg>
-            Download PNG
-          </button>
-          <button class="btn btn-ghost" id="sc-copy-btn" onclick="copyStackCardToClipboard()">
-            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:14px;height:14px">
-              <rect x="9" y="9" width="13" height="13" rx="2"/>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-            </svg>
-            Copy to Clipboard
-          </button>
-        </div>
-
-        <div class="stackcard-tip">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:13px;height:13px;flex-shrink:0;margin-top:1px">
-            <circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>
-          </svg>
-          Card exports at 1200 × 630 px — ideal for Twitter / X, LinkedIn, and Discord posts.
-          Tools are sorted by category and color-coded. The grade badge updates with your Stack Health Score.
-        </div>
-
-      </div>
 
       <!-- ══════════════════════════════════════════════════════ -->
       <!-- PAGE: Stack Compare                                    -->
@@ -3260,42 +3036,6 @@
   </div>
 </div>
 
-<!-- ─── Add Workflow Step Modal ──────────────────────────────── -->
-<div class="modal-overlay" id="addStepModal" onclick="if(event.target===this)closeAddStepModal()">
-  <div class="modal" style="width:420px">
-    <div class="modal-header">
-      <div><h2>Add Step</h2><p>Add a tool to your workflow pipeline</p></div>
-      <button class="modal-close" onclick="closeAddStepModal()">×</button>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Tool</label>
-      <input type="text" class="form-input" id="wf-step-tool" list="wf-tool-datalist" placeholder="Type or pick a tool…" autocomplete="off" />
-      <datalist id="wf-tool-datalist"></datalist>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Role in Workflow</label>
-      <select class="form-input" id="wf-step-role">
-        <option>Input</option>
-        <option>Research</option>
-        <option>Draft</option>
-        <option>Generate</option>
-        <option>Edit</option>
-        <option>Review</option>
-        <option>Automate</option>
-        <option>Distribute</option>
-        <option>Archive</option>
-      </select>
-    </div>
-    <div class="form-group" style="margin-bottom:0">
-      <label class="form-label">Note <span style="color:var(--text-dim);font-weight:400">(optional)</span></label>
-      <input type="text" class="form-input" id="wf-step-note" placeholder="What does this step do?" />
-    </div>
-    <div style="display:flex;gap:8px;margin-top:16px">
-      <button class="btn btn-ghost" onclick="closeAddStepModal()" style="flex:1">Cancel</button>
-      <button class="btn btn-primary" onclick="confirmAddWFStep()" style="flex:2">Add Step</button>
-    </div>
-  </div>
-</div>
 
 <input type="file" id="import-file-input" accept=".json" style="display:none" onchange="importStack(event)">
 
@@ -3308,8 +3048,6 @@
 <script src="aifeatures.js"></script>
 <script src="integrations.js"></script>
 <script src="templates.js"></script>
-<script src="workflows.js"></script>
-<script src="stackcard.js"></script>
 <script src="stackcompare.js"></script>
 <script>
   // Page-specific init on navigation
@@ -3323,8 +3061,6 @@
     if (page === 'integrations') initIntegrations();
     if (page === 'cost')         initCostOptimizer();
     if (page === 'templates')    initTemplates();
-    if (page === 'workflow')     initWorkflow();
-    if (page === 'stackcard')    initStackCard();
     if (page === 'stackcompare') initStackCompare();
   };
   initCatalog();

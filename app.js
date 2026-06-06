@@ -15,8 +15,6 @@ const PAGE_META = {
   integrations: { title: 'Integration Map', sub: 'See which tools in your stack connect and work together' },
   cost:      { title: 'Cost Optimizer',   sub: 'Find tools you can cut and see exactly how much you\'d save' },
   templates: { title: 'Stack Templates',  sub: 'Pre-built stacks for common AI workflows — load and customize' },
-  workflow:     { title: 'Workflow Builder', sub: 'Chain your stack tools into a named, reusable pipeline' },
-  stackcard:    { title: 'Stack Card',      sub: 'Generate a shareable visual card of your AI stack' },
   stackcompare: { title: 'Stack Compare',   sub: 'Compare your stack side-by-side against a template or a friend\'s stack' },
 };
 
