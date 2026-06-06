@@ -142,15 +142,12 @@
     .nav-logo-icon {
       width: 32px;
       height: 32px;
-      background: linear-gradient(135deg, var(--accent) 0%, var(--teal) 100%);
       border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      overflow: hidden;
       flex-shrink: 0;
     }
 
-    .nav-logo-icon svg { width: 18px; height: 18px; fill: #fff; }
+    .nav-logo-icon img { width: 32px; height: 32px; object-fit: cover; display: block; }
 
     .nav-logo-text {
       display: flex;
@@ -2423,17 +2420,7 @@
   <nav id="sidebar">
     <div class="nav-logo">
       <div class="nav-logo-icon">
-        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="10" cy="10" r="3"/>
-          <circle cx="3"  cy="5"  r="2"/>
-          <circle cx="17" cy="5"  r="2"/>
-          <circle cx="3"  cy="15" r="2"/>
-          <circle cx="17" cy="15" r="2"/>
-          <line x1="5" y1="6"  x2="8"  y2="9"  stroke="#fff" stroke-width="1.4" stroke-linecap="round"/>
-          <line x1="15" y1="6" x2="12" y2="9"  stroke="#fff" stroke-width="1.4" stroke-linecap="round"/>
-          <line x1="5" y1="14" x2="8"  y2="11" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/>
-          <line x1="15" y1="14" x2="12" y2="11" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/>
-        </svg>
+        <img src="/favicon.png" alt="Central Hub For AI logo" />
       </div>
       <div class="nav-logo-text">
         <span>Central Hub</span>
