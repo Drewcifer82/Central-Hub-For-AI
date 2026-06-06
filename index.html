@@ -2408,133 +2408,7 @@
       </div>
     </div>
 
-    <div class="nav-items">
-      <div class="nav-section-label">Overview</div>
-
-      <button class="nav-item active" onclick="navigate('home')">
-        <span class="nav-icon">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M3 12L12 3l9 9"/><path d="M9 21V12h6v9"/>
-          </svg>
-        </span>
-        Dashboard
-      </button>
-
-      <button class="nav-item" onclick="navigate('stack')">
-        <span class="nav-icon">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <rect x="2" y="3" width="20" height="4" rx="1"/>
-            <rect x="2" y="10" width="20" height="4" rx="1"/>
-            <rect x="2" y="17" width="20" height="4" rx="1"/>
-          </svg>
-        </span>
-        My Stack
-        <span class="nav-badge" id="stack-count">0</span>
-      </button>
-
-      <button class="nav-item" onclick="navigate('catalog')">
-        <span class="nav-icon">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-          </svg>
-        </span>
-        Tool Catalog
-      </button>
-
-      <button class="nav-item" onclick="navigate('templates')">
-        <span class="nav-icon">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <rect x="3" y="3" width="7" height="7" rx="1"/>
-            <rect x="14" y="3" width="7" height="7" rx="1"/>
-            <rect x="3" y="14" width="7" height="7" rx="1"/>
-            <rect x="14" y="14" width="7" height="7" rx="1"/>
-          </svg>
-        </span>
-        Stack Templates
-      </button>
-
-      <div class="nav-divider"></div>
-      <div class="nav-section-label">AI Features</div>
-
-      <button class="nav-item" onclick="navigate('overlap')">
-        <span class="nav-icon">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <circle cx="9"  cy="12" r="6"/>
-            <circle cx="15" cy="12" r="6"/>
-          </svg>
-        </span>
-        Overlap Detector
-      </button>
-
-      <button class="nav-item" onclick="navigate('gaps')">
-        <span class="nav-icon">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="4"/>
-          </svg>
-        </span>
-        Gap Finder
-      </button>
-
-      <button class="nav-item" onclick="navigate('compare')">
-        <span class="nav-icon">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M18 20V10M12 20V4M6 20v-6"/>
-          </svg>
-        </span>
-        Compare Tools
-      </button>
-
-      <button class="nav-item" onclick="navigate('integrations')">
-        <span class="nav-icon">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
-          </svg>
-        </span>
-        Integration Map
-      </button>
-
-      <button class="nav-item" onclick="navigate('cost')">
-        <span class="nav-icon">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-          </svg>
-        </span>
-        Cost Optimizer
-      </button>
-
-      <button class="nav-item" onclick="navigate('stackcompare')">
-        <span class="nav-icon">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M18 20V10M12 20V4M6 20v-6"/>
-          </svg>
-        </span>
-        Stack Compare
-      </button>
-
-      <div class="nav-divider"></div>
-      <div class="nav-section-label">Build</div>
-
-      <button class="nav-item" onclick="navigate('workflow')">
-        <span class="nav-icon">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/>
-            <path d="M7 12h3M14 12h3"/>
-          </svg>
-        </span>
-        Workflow Builder
-      </button>
-
-      <button class="nav-item" onclick="navigate('stackcard')">
-        <span class="nav-icon">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <rect x="3" y="3" width="18" height="14" rx="2"/>
-            <path d="M8 21h8M12 17v4"/>
-          </svg>
-        </span>
-        Stack Card
-      </button>
-    </div>
+    <div class="nav-items" id="nav-items-container"></div>
 
   </nav>
 
@@ -3426,6 +3300,7 @@
 <input type="file" id="import-file-input" accept=".json" style="display:none" onchange="importStack(event)">
 
 <!-- ─── Scripts ───────────────────────────────────────────────── -->
+<script src="nav.js"></script>
 <script src="app.js"></script>
 <script src="stack.js"></script>
 <script src="catalog-data.js"></script>
