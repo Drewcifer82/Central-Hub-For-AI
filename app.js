@@ -15,7 +15,8 @@ const PAGE_META = {
   integrations: { title: 'Integration Map', sub: 'See which tools in your stack connect and work together' },
   cost:      { title: 'Cost Optimizer',   sub: 'Find tools you can cut and see exactly how much you\'d save' },
   templates: { title: 'Stack Templates',  sub: 'Pre-built stacks for common AI workflows — load and customize' },
-  stackcompare: { title: 'Stack Compare',   sub: 'Compare your stack side-by-side against a template or a friend\'s stack' },
+  stackcompare:   { title: 'Stack Compare',   sub: 'Compare your stack side-by-side against a template or a friend\'s stack' },
+  promptlibrary:  { title: 'Prompt Library',  sub: 'Kickstart prompts for every AI tool — copy and paste into any project' },
 };
 
 /* ── Navigation ── */
