@@ -529,6 +529,101 @@
 
     .cta-banner .btn { padding: 14px 36px; font-size: 15px; }
 
+    /* ─── Suggest Form ───────────────────────────────────────────────── */
+    .suggest-section {
+      max-width: 660px;
+      margin: 0 auto;
+      padding: 80px 40px;
+    }
+
+    .suggest-form {
+      margin-top: 36px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .form-group label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-md);
+      letter-spacing: 0.03em;
+    }
+
+    .form-group label span {
+      color: var(--accent-lt);
+      margin-left: 2px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      background: var(--surface);
+      border: 1px solid var(--border-lt);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 13px;
+      padding: 10px 14px;
+      transition: border-color 0.15s;
+      outline: none;
+      width: 100%;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: var(--text-dim);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--accent);
+    }
+
+    .form-group select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23606080' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 32px;
+      cursor: pointer;
+    }
+
+    .form-group select option { background: var(--card); }
+
+    .form-group textarea { resize: vertical; min-height: 90px; }
+
+    .form-note {
+      font-size: 11px;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+
+    .form-submit {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
     /* ─── Footer ─────────────────────────────────────────────────────── */
     .site-footer {
       background: var(--surface);
@@ -818,13 +913,61 @@
 
     <div class="faq-item">
       <h3>Can I suggest a tool to add to the catalog?</h3>
-      <p>Absolutely. If there is an AI tool you think belongs in the catalog, reach out and we will review it for inclusion in a future update.</p>
+      <p>Absolutely. Use the suggestion form below — just drop in the tool name, a link, and why you think it belongs. We review every submission and add tools that are a good fit in a future update.</p>
     </div>
 
   </div>
 </section>
 
 <!-- ─── CTA Banner ────────────────────────────────────────────────────── -->
+<!-- ─── Suggest a Tool ───────────────────────────────────────────────── -->
+<section class="suggest-section" id="suggest">
+  <div class="section-label">Community</div>
+  <h2 class="section-title">Suggest a tool for the catalog</h2>
+  <p class="section-desc">Know an AI tool that should be here? Fill in the form and we'll review it for a future update.</p>
+
+  <form class="suggest-form" name="suggest-tool" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+    <input type="hidden" name="form-name" value="suggest-tool" />
+    <input type="hidden" name="bot-field" />
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="tool-name">Tool Name <span>*</span></label>
+        <input type="text" id="tool-name" name="tool-name" placeholder="e.g. Perplexity AI" required />
+      </div>
+      <div class="form-group">
+        <label for="tool-url">Tool Website</label>
+        <input type="url" id="tool-url" name="tool-url" placeholder="https://..." />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="tool-category">Category</label>
+      <select id="tool-category" name="tool-category">
+        <option value="" disabled selected>Select a category</option>
+        <option value="Writing">Writing</option>
+        <option value="Image Generation">Image Generation</option>
+        <option value="Video">Video</option>
+        <option value="Audio">Audio</option>
+        <option value="Coding">Coding</option>
+        <option value="Research">Research</option>
+        <option value="Productivity">Productivity</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="tool-reason">Why should it be added?</label>
+      <textarea id="tool-reason" name="tool-reason" placeholder="What does it do that's not already covered in the catalog?"></textarea>
+    </div>
+
+    <div class="form-submit">
+      <p class="form-note">No account needed. Submissions go straight to the team for review.</p>
+      <button type="submit" class="btn btn-primary">Submit Suggestion →</button>
+    </div>
+  </form>
+</section>
+
 <section class="cta-banner">
   <h2>Ready to take control of your AI stack?</h2>
   <p>No sign-up. No credit card. Just open the app and start building.</p>
