@@ -179,6 +179,26 @@
       padding: 18px 20px 6px;
     }
 
+    .nav-features-link {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin: 0 10px 14px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-dim);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    .nav-features-link:hover {
+      color: var(--accent-lt);
+      border-color: var(--accent-dim);
+    }
+
     .nav-items { flex: 1; padding: 8px 10px; overflow-y: auto; }
 
     .nav-item {
@@ -2429,6 +2449,14 @@
     </div>
 
     <div class="nav-items" id="nav-items-container"></div>
+
+    <a href="/features.html" class="nav-features-link" target="_blank" rel="noopener">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14">
+        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+        <polyline points="13 2 13 9 20 9"/>
+      </svg>
+      Features &amp; SEO page
+    </a>
 
   </nav>
 
