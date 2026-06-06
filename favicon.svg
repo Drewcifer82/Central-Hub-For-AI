@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7c6dfa"/>
+      <stop offset="100%" stop-color="#00d4aa"/>
+    </linearGradient>
+  </defs>
+  <!-- background rounded square -->
+  <rect width="32" height="32" rx="8" fill="url(#g)"/>
+  <!-- center node -->
+  <circle cx="16" cy="16" r="4.8" fill="white"/>
+  <!-- corner satellite nodes -->
+  <circle cx="4.8"  cy="8"  r="3.2" fill="white"/>
+  <circle cx="27.2" cy="8"  r="3.2" fill="white"/>
+  <circle cx="4.8"  cy="24" r="3.2" fill="white"/>
+  <circle cx="27.2" cy="24" r="3.2" fill="white"/>
+  <!-- connecting lines -->
+  <line x1="8"    y1="9.6"  x2="12.8" y2="14.4" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+  <line x1="24"   y1="9.6"  x2="19.2" y2="14.4" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+  <line x1="8"    y1="22.4" x2="12.8" y2="17.6" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+  <line x1="24"   y1="22.4" x2="19.2" y2="17.6" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+</svg>
