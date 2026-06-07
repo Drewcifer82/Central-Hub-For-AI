@@ -1001,6 +1001,12 @@
   <h2 class="section-title">Suggest a tool for the catalog</h2>
   <p class="section-desc">Know an AI tool that should be here? Fill in the form and we'll review it for a future update.</p>
 
+  <div id="form-success" style="display:none;background:var(--card);border:1px solid var(--teal);border-radius:var(--radius);padding:32px;text-align:center;margin-top:36px;">
+    <div style="font-size:28px;margin-bottom:12px;">✓</div>
+    <h3 style="color:var(--white);font-size:16px;margin-bottom:8px;">Thanks for the suggestion!</h3>
+    <p style="color:var(--text-md);font-size:14px;">We review every submission and add tools that are a good fit in a future update.</p>
+  </div>
+
   <form class="suggest-form" name="suggest-tool" method="POST" data-netlify="true" netlify-honeypot="bot-field">
     <input type="hidden" name="form-name" value="suggest-tool" />
     <input type="hidden" name="bot-field" />
@@ -1058,6 +1064,27 @@
     <a href="/sitemap.xml">Sitemap</a>
   </div>
 </footer>
+
+<script>
+(function () {
+  var form = document.querySelector('form[name="suggest-tool"]');
+  if (!form) return;
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var body = new URLSearchParams(new FormData(form)).toString();
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body
+    }).then(function () {
+      form.style.display = 'none';
+      document.getElementById('form-success').style.display = 'block';
+    }).catch(function () {
+      form.submit();
+    });
+  });
+})();
+</script>
 
 </body>
 </html>
