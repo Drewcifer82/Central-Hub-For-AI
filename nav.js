@@ -77,6 +77,13 @@ const NAV_CONFIG = [
         icon:  `<path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>`,
       },
       {
+        href:   '/tools/',
+        label:  'Tool Directory',
+        target: '_blank',
+        icon:   `<rect x="3" y="3" width="18" height="18" rx="2"/>
+                 <path d="M3 9h18M9 21V9"/>`,
+      },
+      {
         href:   '/blog/',
         label:  'Blog',
         target: '_blank',
