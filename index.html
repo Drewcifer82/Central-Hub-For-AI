@@ -2832,6 +2832,13 @@
               </svg>
               Import
             </button>
+            <button class="btn btn-teal" onclick="openShareStackModal()" title="Get a shareable link to your stack">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                <path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/>
+              </svg>
+              Share
+            </button>
             <button class="btn btn-primary" onclick="openAddToolModal()">
               <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path d="M12 5v14M5 12h14"/>
@@ -3263,6 +3270,56 @@
 <input type="file" id="import-file-input" accept=".json" style="display:none" onchange="importStack(event)">
 
 <!-- ─── Scripts ───────────────────────────────────────────────── -->
+<!-- ─── Share Stack Modal ───────────────────────────────────── -->
+<div class="modal-overlay" id="shareStackModal" onclick="if(event.target===this)closeShareStackModal()">
+  <div class="modal" style="width:min(540px,95vw)">
+    <div class="modal-header">
+      <div>
+        <h2>Share Your Stack</h2>
+        <p id="share-modal-sub">Anyone with this link can view and import your stack</p>
+      </div>
+      <button class="modal-close" onclick="closeShareStackModal()">×</button>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:16px">
+      <input class="form-input" id="share-link-input" readonly onclick="this.select()"
+        style="flex:1;font-size:12px;color:var(--text-md)" />
+      <button class="btn btn-primary" id="share-copy-btn" onclick="copyShareLink()" style="flex-shrink:0">Copy Link</button>
+    </div>
+    <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);margin-bottom:10px">
+      Or share directly
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <a class="btn btn-ghost" id="share-x" target="_blank" rel="noopener">Share on X</a>
+      <a class="btn btn-ghost" id="share-reddit" target="_blank" rel="noopener">Share on Reddit</a>
+      <a class="btn btn-ghost" id="share-linkedin" target="_blank" rel="noopener">Share on LinkedIn</a>
+    </div>
+    <p style="font-size:11px;color:var(--text-dim);margin-top:16px;line-height:1.6">
+      The link encodes your tool list — no account, no server, nothing stored. Friends who open it can import your stack into their own hub with one click.
+    </p>
+  </div>
+</div>
+
+<!-- ─── Shared Stack Import Modal ───────────────────────────── -->
+<div class="modal-overlay" id="sharedImportModal" onclick="if(event.target===this)closeSharedImportModal()">
+  <div class="modal" style="width:min(540px,95vw)">
+    <div class="modal-header">
+      <div>
+        <h2>Someone shared an AI stack with you</h2>
+        <p id="shared-import-sub"></p>
+      </div>
+      <button class="modal-close" onclick="closeSharedImportModal()">×</button>
+    </div>
+    <div class="scmp-chip-row" id="shared-import-list" style="margin-bottom:20px"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button class="btn btn-ghost" onclick="closeSharedImportModal()">No Thanks</button>
+      <button class="btn btn-primary" id="shared-import-btn" onclick="importSharedStack()">Add to My Stack</button>
+    </div>
+    <p style="font-size:11px;color:var(--text-dim);margin-top:14px;line-height:1.6">
+      Tools you already have are skipped — importing never creates duplicates or removes anything from your stack.
+    </p>
+  </div>
+</div>
+
 <script src="nav.js"></script>
 <script src="app.js"></script>
 <script src="stack.js"></script>
@@ -3274,6 +3331,7 @@
 <script src="prompt-library-data.js"></script>
 <script src="promptlibrary.js"></script>
 <script src="stackcompare.js"></script>
+<script src="share.js"></script>
 <script>
   // Page-specific init on navigation
   const _origNavigate = navigate;
